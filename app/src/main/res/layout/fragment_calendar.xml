@@ -16,8 +16,72 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_calendar2"
+        app:layout_constraintTop_toBottomOf="@id/text_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/search"
+         />
+
+    <TextView
+        android:id="@+id/text_calendar3"
+        app:layout_constraintTop_toBottomOf="@id/text_calendar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/date"
+        />
+
+    <TextView
+        android:id="@+id/text_calendar4"
+        app:layout_constraintTop_toBottomOf="@id/text_calendar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/details"
+        />
+
+    <TextView
+        android:id="@+id/text_calendar5"
+        app:layout_constraintTop_toBottomOf="@id/text_calendar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/confirmQuestion"
+        />
+
+    <TextView
+        android:id="@+id/text_calendar6"
+        app:layout_constraintTop_toBottomOf="@id/text_calendar5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/confirm"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

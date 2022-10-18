@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">FitnessApp a todo gas</string>
+    <string name="title_home">Inicio</string>
+    <string name="title_calendar">Calendario</string>
+    <string name="title_QR">QR</string>
+    <string name="title_map">Mapa</string>
+    <string name="title_settings">Opciones</string>
+
+    <string name="search">Buscador</string>
+    <string name="ads">Publicidades / Promos</string>
+    <string name="activities">Mis Actividades:</string>
+
+    <string name="date">Día/Mes/Año</string>
+    <string name="details">Horario + detalles</string>
+    <string name="confirmQuestion">¿Confirmar asistencia tentativa?</string>
+    <string name="confirm">Confirmar</string>
+
+    <string name="lang">Idioma: 🇪🇸</string>
+    <string name="check_bg">Habilitar fondos random</string>
+    <string name="adorno">Botón de adorno</string>
+
+    <string name="hola">hola</string>
+    <string name="chau">chau</string>
+    <string name="test">B́ót́óń de test</string>
+
+</resources>

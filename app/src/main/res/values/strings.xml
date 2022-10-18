@@ -5,8 +5,23 @@
     <string name="title_QR">QR</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="check_bg">Habilitar fondos random</string>
+    <string name="search">Search</string>
+    <string name="ads">Ads / Promotions</string>
+    <string name="activities">My Activities:</string>
+
+    <string name="date">Day/Month/Year</string>
+    <string name="details">Datetime + details</string>
+    <string name="confirmQuestion">Confirm tentative attendance?</string>
+    <string name="confirm">Confirm</string>
+
+
+    <string name="lang">Language: 🇺🇸</string>
+    <string name="check_bg">Enable random backgrounds</string>
+    <string name="adorno">Test checkbox</string>
+
+    <string name="hola">Hi</string>
+    <string name="chau">Bye</string>
+    <string name="test">Test button</string>
+
 </resources>

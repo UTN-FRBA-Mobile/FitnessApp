@@ -24,8 +24,19 @@
         android:paddingBottom="?attr/actionBarSize"/>
 
 
-    <CheckBox android:id="@+id/check_bg"
+    <TextView
+        android:id="@+id/lang"
         app:layout_constraintTop_toBottomOf="@id/text_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/lang"
+        android:background="#BBFFE7DA"
+        android:paddingLeft="?attr/actionBarSize"
+        />
+
+    <CheckBox android:id="@+id/check_bg"
+        app:layout_constraintTop_toBottomOf="@id/lang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/check_bg"
@@ -37,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/check_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="boton de adorno"
+        android:text="@string/adorno"
         android:onClick="onCheckboxClicked"
         android:paddingRight="?attr/actionBarSize"
         android:background="#BBFFE7DA"/>

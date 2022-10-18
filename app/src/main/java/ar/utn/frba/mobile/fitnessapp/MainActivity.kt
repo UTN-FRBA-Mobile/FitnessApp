@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.adorno -> {
                     if (checked) {
-                        Toast.makeText(this, "hola", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.hola), Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "chau", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.chau), Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     fun sendMessage(view: View) {
         // Do something in response to button click
-        Toast.makeText(this, "Test button", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.test), Toast.LENGTH_SHORT).show()
         //settingsFragment?.setBackgroundColor(Color.WHITE)
     }
 
