@@ -4,11 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".ui.settings.SettingsFragment"
+    android:paddingTop="?attr/actionBarSize"
+    android:id="@+id/settingsScreen">
+
+    <!-- https://developer.android.com/develop/ui/views/components/settings/organize-your-settings -->
 
     <TextView
         android:id="@+id/text_settings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#BBFFE7DA"
+        android:paddingBottom="?attr/actionBarSize"/>
+
+
+    <CheckBox android:id="@+id/check_bg"
+        app:layout_constraintTop_toBottomOf="@id/text_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/check_bg"
+        android:onClick="onCheckboxClicked"
+        android:paddingRight="?attr/actionBarSize"
+        android:background="#BBFFE7DA"/>
+
+    <CheckBox android:id="@+id/adorno"
+        app:layout_constraintTop_toBottomOf="@id/check_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="boton de adorno"
+        android:onClick="onCheckboxClicked"
+        android:paddingRight="?attr/actionBarSize"
+        android:background="#BBFFE7DA"/>
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@id/adorno"
+        android:id="@+id/button_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:onClick="sendMessage"
+        android:paddingRight="?attr/actionBarSize"
+        android:background="#BBFFE7DA"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

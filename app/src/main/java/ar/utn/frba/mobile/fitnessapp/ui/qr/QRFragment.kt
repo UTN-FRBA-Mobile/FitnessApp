@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import ar.utn.frba.mobile.fitnessapp.MyPreferences
+import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentQrBinding
 
 class QRFragment : Fragment() {
 
     private var _binding: FragmentQrBinding? = null
+    private var showBG: Boolean = true
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -33,6 +37,14 @@ class QRFragment : Fragment() {
             textView.text = it
         }
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        showBG = MyPreferences.isShowBGsPreferredView(context!!)
+        if(showBG){
+            activity?.findViewById<ConstraintLayout>(R.id.qrScreen)?.setBackgroundResource(R.drawable.bg_gymx);
+        }
     }
 
     override fun onDestroyView() {

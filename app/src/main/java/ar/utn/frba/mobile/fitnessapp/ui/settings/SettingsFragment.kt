@@ -6,12 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import ar.utn.frba.mobile.fitnessapp.MainActivity
+import ar.utn.frba.mobile.fitnessapp.MyPreferences
+import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
+    private var showBG: Boolean = true
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -35,8 +42,22 @@ class SettingsFragment : Fragment() {
         return root
     }
 
+    override fun onStart() {
+        super.onStart()
+        //Toast.makeText(activity, "Hola settings", Toast.LENGTH_SHORT).show()
+        val settingsScreen = activity?.findViewById<ConstraintLayout>(R.id.settingsScreen)
+        val chkBG  = activity?.findViewById<CheckBox>(R.id.check_bg);
+        showBG = MyPreferences.isShowBGsPreferredView(context!!)
+
+        chkBG?.setChecked(showBG)
+        if(showBG){
+            settingsScreen?.setBackgroundResource(R.drawable.bg_beachx);
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        //Toast.makeText(activity, "Chau settings", Toast.LENGTH_SHORT).show()
         _binding = null
     }
 

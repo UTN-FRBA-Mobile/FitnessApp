@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.calendar.CalendarFragment">
+    tools:context=".ui.calendar.CalendarFragment"
+    android:id="@+id/calendarScreen">
 
     <TextView
         android:id="@+id/text_calendar"
