@@ -1,5 +1,8 @@
 package ar.utn.frba.mobile.fitnessapp
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
@@ -12,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import ar.utn.frba.mobile.fitnessapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,11 +34,22 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_calendar, R.id.navigation_qr, R.id.navigation_map, R.id.navigation_settings
+                R.id.navigation_home,
+                R.id.navigation_calendar,
+                R.id.navigation_qr,
+                R.id.navigation_map,
+                R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        setFirebaseTokenInView()
+        binding.reloadButton.setOnClickListener { setFirebaseTokenInView() }
+
+//        binding.copyButton.setOnClickListener { copyTokenToClipboard() }
+
+        binding.subscribeButton.setOnClickListener { subscribeToTopic() }
     }
 
     fun onCheckboxClicked(view: View) {
@@ -68,6 +83,34 @@ class MainActivity : AppCompatActivity() {
         // Do something in response to button click
         Toast.makeText(this, getString(R.string.test), Toast.LENGTH_SHORT).show()
         //settingsFragment?.setBackgroundColor(Color.WHITE)
+    }
+
+    private fun setFirebaseTokenInView() {
+        val firebaseTokenText = MyPreferences.getFirebaseToken(this)
+
+        if (binding.firebaseToken.text != null) {
+            binding.firebaseToken.text = firebaseTokenText
+            binding.reloadButton.visibility = View.GONE
+//            binding.copyButton.visibility = View.VISIBLE
+            binding.topicContainer.visibility = View.VISIBLE
+        } else {
+//            binding.copyButton.visibility = View.GONE
+            binding.topicContainer.visibility = View.GONE
+            binding.reloadButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun subscribeToTopic() {
+        val topicText = binding.topic.text.toString()
+        FirebaseMessaging.getInstance().subscribeToTopic(topicText)
+        Toast.makeText(this, "Subscripto a $topicText", Toast.LENGTH_SHORT).show()
+        binding.topic.setText("")
+    }
+
+    fun copyTokenToClipboard() {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Firebase token", binding.firebaseToken.text)
+        clipboard.setPrimaryClip(clip)
     }
 
 }
