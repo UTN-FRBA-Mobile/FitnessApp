@@ -24,4 +24,10 @@
     <string name="chau">Bye</string>
     <string name="test">Test button</string>
 
+    <string name="test_camera">Test camera</string>
+    <string name="permissionTitle">Please give us permission</string>
+
+    <string name="permissionGranted">Permission granted</string>
+    <string name="permissionBlocked">Permission blocked</string>
+
 </resources>
