@@ -25,8 +25,9 @@
     <string name="test">Test button</string>
 
     <string name="test_camera">Test camera</string>
-    <string name="permissionTitle">Please give us permission</string>
+    <string name="scanQR">Scan QR</string>
 
+    <string name="permissionTitle">Please give us permission</string>
     <string name="permissionGranted">Permission granted</string>
     <string name="permissionBlocked">Permission blocked</string>
 

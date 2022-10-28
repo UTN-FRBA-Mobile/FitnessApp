@@ -24,8 +24,9 @@
     <string name="test">B́ót́óń de test</string>
 
     <string name="test_camera">Probar cámara</string>
-    <string name="permissionTitle">Necesitamos tu permiso</string>
+    <string name="scanQR">Escanear QR</string>
 
+    <string name="permissionTitle">Necesitamos tu permiso</string>
     <string name="permissionGranted">Permiso concedido</string>
     <string name="permissionBlocked">SE TE HA PROHIBIDO LA SOLICITUD. Lo siento :(</string>
 
