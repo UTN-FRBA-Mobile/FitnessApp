@@ -8,7 +8,7 @@
     android:id="@+id/qrScreen">
 
     <TextView
-        android:id="@+id/text_qr"
+        android:id="@+id/camera_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Hello" />
@@ -21,7 +21,7 @@
         android:text="@string/scanQR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cameraPermissionStatus"
+        app:layout_constraintBottom_toTopOf="@+id/resultBox"
          />
 
     <Button
@@ -37,11 +37,11 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
-        android:scaleType="fitCenter"
+        android:layout_height="512dp"
+        android:scaleType="fitStart"
         android:layout_gravity="center"
         android:layout_marginTop="36dp"
-        app:layout_constraintTop_toTopOf="@+id/text_qr"
+        app:layout_constraintTop_toTopOf="@+id/camera_info"
         tools:layout_editor_absoluteX="0dp" >
     </androidx.camera.view.PreviewView>
 
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/previewView" />
 
     <TextView
-        android:id="@+id/cameraPermissionStatus"
+        android:id="@+id/resultBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
