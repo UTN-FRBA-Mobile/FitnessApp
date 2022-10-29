@@ -17,8 +17,6 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.Permissions
@@ -45,6 +43,7 @@ class QRFragment : Fragment() {
 
     private var cameraProvider: ProcessCameraProvider? = null
     private var cameraSelector: CameraSelector? = null
+    private var previewUseCase: Preview? = null
 
     var mediaPlayer: MediaPlayer? = null
 
@@ -95,55 +94,21 @@ class QRFragment : Fragment() {
             qrView?.setBackgroundResource(R.drawable.bg_gymx);
         }
 
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProvider = cameraProviderFuture.get()
+
         updatePermissionDisplay()
+        setDropdown()
 
+    }
 
-        //dropdown
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        val cameraProvider = cameraProviderFuture.get()     //todo cambiar esta llamada que aparece 4 veces
-        val size: Int = cameraProvider.availableCameraInfos.size
+    private fun setDropdown() {
+        val size: Int = cameraProvider!!.availableCameraInfos.size
 
         val dropdown: Spinner? = activity?.findViewById(R.id.spinner)
         val items = Array(size){"$it"}
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_dropdown_item, items)
         dropdown?.adapter = adapter
-
-    }
-
-    private fun setCameraProviderListener(cameraID: Int) {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener({
-            try {
-                val cameraProvider = cameraProviderFuture.get()
-                bindPreview(cameraProvider, cameraID)
-            } catch (e: ExecutionException) {
-                // No errors need to be handled for this Future
-                // This should never be reached
-                e.printStackTrace()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-    private fun bindPreview(cameraProvider: ProcessCameraProvider, cameraID: Int) {
-        val availableCameraInfos: List<CameraInfo> = cameraProvider.availableCameraInfos
-
-        //val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
-        cameraSelector = availableCameraInfos[cameraID].cameraSelector
-        val preview = Preview.Builder().build()
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-        val viewPort = previewView.viewPort
-        if (viewPort != null) {
-            val useCaseGroup = UseCaseGroup.Builder()
-                .addUseCase(preview)
-                .setViewPort(viewPort)
-                .build()
-            cameraProvider.unbindAll()
-            val camera = cameraProvider.bindToLifecycle(this, cameraSelector!!, useCaseGroup)
-            val cameraControl: CameraControl = camera.getCameraControl()
-            cameraControl.setLinearZoom(0.3.toFloat())
-        }
     }
 
     private fun updatePermissionDisplay(){
@@ -188,22 +153,55 @@ class QRFragment : Fragment() {
         val mySpinner = activity?.findViewById<Spinner>(R.id.spinner)
         val cameraID: Int = Integer.parseInt(mySpinner?.getSelectedItem().toString())
 
-        //previewView
-        setCameraProviderListener(cameraID)
-        //analyzer
-        processCameraProvider.observe(requireActivity()) { provider: ProcessCameraProvider? ->
+        val availableCameraInfos: List<CameraInfo> = cameraProvider!!.availableCameraInfos
+        cameraSelector = availableCameraInfos[cameraID].cameraSelector
+
+        //setCameraProviderListener(cameraID)
+
+        ViewModelProvider(requireActivity())[QRViewModel::class.java]
+            .processCameraProvider
+            .observe(requireActivity()) { provider: ProcessCameraProvider? ->
                 cameraProvider = provider
+                bindPreviewUseCase()
                 bindAnalyseUseCase()
             }
     }
 
     private fun closeCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        val cameraProvider = cameraProviderFuture.get()
-        cameraProvider.unbindAll()
-        //todo cerrar thread de analysis?, hacer que vuelva a funcionar el scanner si se abre la camara una segunda vez
+        cameraProvider!!.unbindAll()
+        //ViewModelProvider(requireActivity())[QRViewModel::class.java].processCameraProvider.removeObservers(requireActivity())
+        //cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        //ViewModelProvider(requireActivity())[QRViewModel::class.java].reset()
+        //cerrar thread de analysis?
     }
 
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    private fun bindPreviewUseCase() {
+        if (previewUseCase != null) {
+            cameraProvider!!.unbind(previewUseCase)
+        }
+
+        previewUseCase = Preview.Builder()
+            .setTargetRotation(previewView!!.display.rotation)
+            .build()
+
+        //Attach the PreviewView surface provider to the preview use case.
+        previewUseCase!!.setSurfaceProvider(previewView!!.surfaceProvider)
+
+        try {
+            cameraProvider!!.bindToLifecycle(
+                this,
+                cameraSelector!!,
+                previewUseCase
+            )
+        } catch (illegalStateException: IllegalStateException) {
+            //Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            //Log.e(TAG, illegalArgumentException.message ?: "IllegalArgumentException")
+        }
+    }
 
     private fun bindAnalyseUseCase() {
         // Note that if you know which format of barcode your app is dealing with, detection will be faster
@@ -284,24 +282,46 @@ class QRFragment : Fragment() {
             }
     }
 
-    private var cameraProviderLiveData: MutableLiveData<ProcessCameraProvider>? = null
-    val processCameraProvider: LiveData<ProcessCameraProvider>
-        get() {
-            if (cameraProviderLiveData == null) {
-                cameraProviderLiveData = MutableLiveData()
-                val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-                cameraProviderFuture.addListener(
-                    Runnable {
-                        try {
-                            cameraProviderLiveData!!.setValue(cameraProviderFuture.get())
-                        } catch (e: ExecutionException) {
-                            //Log.e(TAG, "Unhandled exception", e)
-                        }
-                    },
-                    ContextCompat.getMainExecutor(requireContext())
-                )
-            }
-            return cameraProviderLiveData!!
-        }
 
+
+
+
+
+
+    // ------------------------------------------------------------------------------------------ for camera preview without scanner
+    // https://stackoverflow.com/questions/60301296/how-to-use-camerax-with-previewview
+    private fun setCameraProviderListener(cameraID: Int) {
+        cameraProviderFuture.addListener({
+            try {
+                val cameraProvider = cameraProviderFuture.get()
+                bindPreview(cameraProvider, cameraID)
+            } catch (e: ExecutionException) {
+                // No errors need to be handled for this Future
+                // This should never be reached
+                e.printStackTrace()
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun bindPreview(cameraProvider: ProcessCameraProvider, cameraID: Int) {
+        val availableCameraInfos: List<CameraInfo> = cameraProvider.availableCameraInfos
+
+        //val cameraSelector = CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+        cameraSelector = availableCameraInfos[cameraID].cameraSelector
+        val preview = Preview.Builder().build()
+        preview.setSurfaceProvider(previewView.surfaceProvider)
+        val viewPort = previewView.viewPort
+        if (viewPort != null) {
+            val useCaseGroup = UseCaseGroup.Builder()
+                .addUseCase(preview)
+                .setViewPort(viewPort)
+                .build()
+            cameraProvider.unbindAll()
+            val camera = cameraProvider.bindToLifecycle(this, cameraSelector!!, useCaseGroup)
+            val cameraControl: CameraControl = camera.getCameraControl()
+            cameraControl.setLinearZoom(0.3.toFloat())
+        }
+    }
 }
