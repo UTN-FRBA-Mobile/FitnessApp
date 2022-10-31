@@ -67,15 +67,10 @@ class QRFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val qrViewModel = ViewModelProvider(this).get(QRViewModel::class.java)
 
         _binding = FragmentQrBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.cameraInfo
-        qrViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 
@@ -90,14 +85,13 @@ class QRFragment : Fragment() {
             closeCamera()
         }
 
-        previewView = activity?.findViewById(R.id.previewView)!!
         mediaPlayer = MediaPlayer.create(activity, R.raw.s1600)
 
     }
 
     override fun onStart() {
         super.onStart()
-        val qrView = activity?.findViewById<ConstraintLayout>(R.id.qrScreen)
+        val qrView = activity?.findViewById<ScrollView>(R.id.qrScreen)
 
         showBG = MyPreferences.isShowBGsPreferredView(context!!)
         if(showBG){
@@ -115,7 +109,8 @@ class QRFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
+        //val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
+        previewView = activity?.findViewById(R.id.previewView)!!
 
         //sub half of the image's width and height to the offset, to center the image
 
@@ -246,9 +241,21 @@ class QRFragment : Fragment() {
 
         val barcodeScanner: BarcodeScanner = BarcodeScanning.getClient(options)
 
-        val analysisUseCase = ImageAnalysis.Builder().setTargetRotation(previewView.display.rotation)
+        val w: Int
+        val h: Int
+        val r = previewView.display.rotation    //0, 1, 2
+        //Toast.makeText(getActivity(), r.toString(), Toast.LENGTH_SHORT).show()
+        if(r == 0){
+            w = 480
+            h = 640
+        }else{
+            w = 640
+            h = 480
+        }
+
+        val analysisUseCase = ImageAnalysis.Builder().setTargetRotation(r)
             .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST) //waits for imageProxy.close() to process next image
-            .setTargetResolution(Size(480, 640))
+            .setTargetResolution(Size(w, h))
             .build()
 
 
@@ -285,7 +292,7 @@ class QRFragment : Fragment() {
         val width: Int
         val height: Int
         if(rotation == 90 || rotation == 270){
-            //todo para 270 sale la x espejada ._.
+            //todo para la camara de selfi me sale la x espejada (270 para vertical, y 0 o 180 para horizontal)
             width = frameHeight
             height = frameWidth
         } else{
@@ -326,7 +333,6 @@ class QRFragment : Fragment() {
         val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
         val resultBox = activity?.findViewById<TextView>(R.id.resultBox)
 
-        //todo crashes when switching orientation, and when starting the camera in horizontal mode
 
         barcodeScanner.process(inputImage)
             .addOnSuccessListener { barcodes ->

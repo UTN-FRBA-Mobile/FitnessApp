@@ -10,12 +10,6 @@ import androidx.lifecycle.ViewModel
 import java.util.concurrent.ExecutionException
 
 class QRViewModel(application: Application) : AndroidViewModel(application) {
-    // TODO: Implement the ViewModel
-    private val _text = MutableLiveData<String>().apply {
-        value = "QR screen"
-    }
-    val text: LiveData<String> = _text
-
 
     //https://c1ctech.com/android-scanning-barcode-qr-code-using-google-ml-kit-and-camerax/
 

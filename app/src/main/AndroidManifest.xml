@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera"/>
 
+    <!--adentro de activity (redibuja el layout horizontal pero se pierde el estado del spinner)    android:configChanges="orientation|screenSize"-->
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
