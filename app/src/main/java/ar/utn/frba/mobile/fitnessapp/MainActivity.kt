@@ -1,5 +1,6 @@
 package ar.utn.frba.mobile.fitnessapp
 
+import android.R
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -14,10 +15,16 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import ar.utn.frba.mobile.fitnessapp.databinding.ActivityMainBinding
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -111,6 +118,14 @@ class MainActivity : AppCompatActivity() {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Firebase token", binding.firebaseToken.text)
         clipboard.setPrimaryClip(clip)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(LatLng(0, 0))
+                .title("Marker")
+        )
     }
 
 }

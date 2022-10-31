@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentMapBinding
+import com.google.android.gms.maps.SupportMapFragment
 
 class MapFragment : Fragment() {
 
@@ -29,13 +30,18 @@ class MapFragment : Fragment() {
         val mapViewModel =
             ViewModelProvider(this).get(MapViewModel::class.java)
 
-        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        val mapFragment = SupportMapFragment.newInstance()
+        _binding
+            .beginTransaction()
+            .add(R.id.my_container, mapFragment)
+            .commit()
+//        _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textMap
-        mapViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+//        val textView: TextView = binding.textMap
+//        mapViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
         return root
     }
 
