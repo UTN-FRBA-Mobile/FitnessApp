@@ -47,8 +47,8 @@
 
     <ImageView
         android:id="@+id/guyPNG"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="@dimen/image_size"
         android:src="@drawable/guy"
         android:visibility="invisible"/>
 
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:background="#BBFFE7DA"
         android:text="Camera ID: "
         android:textSize="16sp"
@@ -68,11 +68,10 @@
         android:id="@+id/spinner"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
         android:spinnerMode="dropdown"
-        app:layout_constraintStart_toEndOf="@+id/cameraIDText"
-        app:layout_constraintTop_toBottomOf="@+id/previewView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraIDText" />
 
     <TextView
         android:id="@+id/resultBox"

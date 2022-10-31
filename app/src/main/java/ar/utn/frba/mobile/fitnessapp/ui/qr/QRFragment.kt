@@ -12,6 +12,7 @@ import android.view.Surface.ROTATION_90
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.Dimension
 import androidx.camera.core.*
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -30,6 +31,10 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
@@ -46,6 +51,10 @@ class QRFragment : Fragment() {
     private var cameraProvider: ProcessCameraProvider? = null
     private var cameraSelector: CameraSelector? = null
     private var previewUseCase: Preview? = null
+
+    private var offsetX: Float = 0F
+    private var offsetY: Float = 0F
+    private var relation: Float = 1F
 
     var mediaPlayer: MediaPlayer? = null
 
@@ -102,11 +111,33 @@ class QRFragment : Fragment() {
         setDropdown()
 
 
-        val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
-        guyPNG?.setX(1000F)
-        guyPNG?.setY(0F);
+    }
 
-        guyPNG?.setVisibility(View.VISIBLE);
+    override fun onResume() {
+        super.onResume()
+        val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
+
+        //sub half of the image's width and height to the offset, to center the image
+
+        //val dpi = context!!.resources.displayMetrics.density
+        val size = context!!.resources.getDimension(R.dimen.image_size)
+        offsetX -= size/2
+        offsetY -= size/2
+
+
+        //add the absolute start position of previewView to the Y offset (to account for layout_marginTop="36dp")
+        /*val posScreen: IntArray = intArrayOf(0, 0)
+        previewView.getLocationOnScreen(posScreen)
+        val posWindow: IntArray = intArrayOf(0, 0)
+        previewView.getLocationInWindow(posWindow)*/
+
+        offsetX += previewView.x
+        offsetY += previewView.y
+
+        /*Toast.makeText(getActivity(), offsetY.toString(), Toast.LENGTH_SHORT).show()
+        guyPNG?.setX(offsetX)
+        guyPNG?.setY(offsetY)
+        guyPNG?.setVisibility(View.VISIBLE)*/
 
     }
 
@@ -220,9 +251,6 @@ class QRFragment : Fragment() {
             .setTargetResolution(Size(480, 640))
             .build()
 
-        //val cameraInfoBox = activity?.findViewById<TextView>(R.id.camera_info)
-        //val info = analysisUseCase.resolutionInfo
-        //cameraInfoBox?.setText(info.toString())
 
         // Initialize our background executor
         val cameraExecutor = Executors.newSingleThreadExecutor() //quien cierra thread?
@@ -240,6 +268,10 @@ class QRFragment : Fragment() {
                 cameraSelector!!,
                 analysisUseCase
             )
+            val info = analysisUseCase.resolutionInfo
+            //Toast.makeText(getActivity(), info?.toString(), Toast.LENGTH_SHORT).show()
+            readFirstFrame(info!!.rotationDegrees, info.resolution.width, info.resolution.height)
+
         } catch (illegalStateException: IllegalStateException) {
             //Log.e(TAG, illegalStateException.message ?: "IllegalStateException")
         } catch (illegalArgumentException: IllegalArgumentException) {
@@ -247,40 +279,54 @@ class QRFragment : Fragment() {
         }
     }
 
+    private fun readFirstFrame(rotation: Int, frameWidth: Int, frameHeight: Int){
+        val cameraInfoBox = activity?.findViewById<TextView>(R.id.camera_info)
+
+        val width: Int
+        val height: Int
+        if(rotation == 90 || rotation == 270){
+            //todo para 270 sale la x espejada ._.
+            width = frameHeight
+            height = frameWidth
+        } else{
+            //rotation 0 or 180
+            width = frameWidth
+            height = frameHeight
+        }
+
+        relation = previewView.width.toFloat() / width.toFloat()
+
+        val imageRatio: Float = (width.toFloat()/height.toFloat())
+        var previewRatio: Float = (previewView.width.toFloat()/previewView.height.toFloat())
+        val imageProxySize: String
+        val previewViewSize: String
+        var newHeight = previewView.height
+
+        //fix when imageProxy ratio ≠ previewView aspect ratio
+        if(imageRatio != previewRatio){
+            val viewWidth = previewView.width.toFloat()
+
+            newHeight = (viewWidth/imageRatio).toInt()
+            //Toast.makeText(getActivity(), newHeight.toString(), Toast.LENGTH_SHORT).show()
+            previewView.layoutParams.height = newHeight
+
+            previewRatio = (previewView.width.toFloat()/newHeight.toFloat())
+        }
+
+        imageProxySize = "camera: " + width.toString() + "x" + height.toString() + " " + (imageRatio*100).toInt().toString()+ ". "
+        previewViewSize = "preview: " + previewView.width.toString() + "x" + newHeight.toString() + " " + (previewRatio*100).toInt().toString() + ". "
+        val rot = "$rotation "
+
+        cameraInfoBox?.setText(rot + imageProxySize + previewViewSize)  //crashea si es muy largo el string ????
+
+    }
+
     private fun processImageProxy(barcodeScanner: BarcodeScanner, imageProxy: ImageProxy) {
         val inputImage = InputImage.fromMediaImage(imageProxy.image!!, imageProxy.imageInfo.rotationDegrees)
         val guyPNG = activity?.findViewById<ImageView>(R.id.guyPNG)
         val resultBox = activity?.findViewById<TextView>(R.id.resultBox)
 
-        val cameraInfoBox = activity?.findViewById<TextView>(R.id.camera_info)
-
-        val width: Int
-        val height: Int
-        if(imageProxy.imageInfo.rotationDegrees == 90){
-            width = imageProxy.height
-            height = imageProxy.width
-        } else{
-            width = imageProxy.width
-            height = imageProxy.height
-            Toast.makeText(getActivity(), "warning orientation not tested", Toast.LENGTH_SHORT).show()
-        }
-
-        val relation = previewView.width.toFloat() / width.toFloat()
-
-        val imageProxySize = "camera: " + width.toString() + "x" + height.toString() + " " + (width*100/height).toString()+ ". "
-        val previewViewSize = "preview: " + previewView.width.toString() + "x" + previewView.height.toString() + " " + (previewView.width*100/previewView.height).toString() + ". "
-        val rotation = imageProxy.imageInfo.rotationDegrees.toString() + " "
-        val relationString = "x" + relation.toString()
-        cameraInfoBox?.setText(rotation + imageProxySize + previewViewSize + relationString )  //crashea si es muy largo el string ????
-
-        //todo do this once, instead of each frame
-        //todo add the absolute start position of previewView to the base Y position (to account for layout_marginTop="36dp")
-        //todo sub half of the image's width and height to the position, to make it centered
-        //todo fix when imageProxy ratio ≠ previewView aspect ratio
         //todo crashes when switching orientation, and when starting the camera in horizontal mode
-
-
-
 
         barcodeScanner.process(inputImage)
             .addOnSuccessListener { barcodes ->
@@ -298,10 +344,8 @@ class QRFragment : Fragment() {
                     val centerX = (corners[0].x.toFloat() + corners[1].x.toFloat())/2 * relation
                     val centerY = (corners[0].y.toFloat() + corners[2].y.toFloat())/2 * relation
 
-                    guyPNG?.setX(centerX)
-                    guyPNG?.setY(centerY);
-                    //Toast.makeText(getActivity(), "puntos: " + corners[0].y.toString() + " " + corners[1].y.toString() + " "+ corners[2].y.toString() + " "+ corners[3].y.toString() + " ", Toast.LENGTH_SHORT).show()
-                    //Toast.makeText(getActivity(), "puntos: " + centerX + " " + centerY + " " + relation.toString(), Toast.LENGTH_SHORT).show()
+                    guyPNG?.setX(centerX + offsetX)
+                    guyPNG?.setY(centerY + offsetY);
 
                     guyPNG?.setVisibility(View.VISIBLE);  // make image visible
                     mediaPlayer?.start()
@@ -321,6 +365,11 @@ class QRFragment : Fragment() {
                     guyPNG?.setVisibility(View.INVISIBLE)
                     imageProxy.close()
                 }
+                /*CoroutineScope(Dispatchers.IO).launch {
+                    delay(3000 - System.currentTimeMillis())
+                    guyPNG?.setVisibility(View.INVISIBLE)
+                    imageProxy.close()
+                }*/
             }
     }
 
