@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +46,7 @@ class SettingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         //Toast.makeText(activity, "Hola settings", Toast.LENGTH_SHORT).show()
-        val settingsScreen = activity?.findViewById<ConstraintLayout>(R.id.settingsScreen)
+        val settingsScreen = activity?.findViewById<ScrollView>(R.id.settingsScreen)
         val chkBG  = activity?.findViewById<CheckBox>(R.id.check_bg);
         showBG = MyPreferences.isShowBGsPreferredView(context!!)
 
