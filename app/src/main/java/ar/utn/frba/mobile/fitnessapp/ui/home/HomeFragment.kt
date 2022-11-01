@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
+import com.google.android.material.textfield.TextInputEditText
 
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
     private var showBG: Boolean = true
 
@@ -26,17 +26,13 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<TextView>(R.id.textView).text = "Hola que tal"
     }
 
     override fun onStart() {
