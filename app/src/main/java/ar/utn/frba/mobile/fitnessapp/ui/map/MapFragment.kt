@@ -59,14 +59,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        // Add a marker in Buenos Aires
+        val sydney = LatLng(-34.6, -58.3)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Buenos Aires"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 }
