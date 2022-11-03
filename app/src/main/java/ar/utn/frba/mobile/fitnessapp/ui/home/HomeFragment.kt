@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
@@ -14,11 +17,13 @@ import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
 import com.google.android.material.textfield.TextInputEditText
 
 class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
     private var showBG: Boolean = true
+
+    private val viewModel: HomeViewModel by viewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -32,16 +37,25 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextView>(R.id.textView).text = "Hola que tal"
-    }
 
-    override fun onStart() {
-        super.onStart()
-        showBG = MyPreferences.isShowBGsPreferredView(context!!)
-        if(showBG){
-            activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax);
+        binding.searchButton.setOnClickListener {
+            val searchQuery: EditText = binding.searchQuery
+            val query: String = searchQuery.text.toString()
+            viewModel.search(query)
+        }
+
+        viewModel.searchResults.observe(viewLifecycleOwner) {
+            println(it)
         }
     }
+
+    //override fun onStart() {
+    //    super.onStart()
+    //    showBG = MyPreferences.isShowBGsPreferredView(context!!)
+    //    if(showBG){
+    //        activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax);
+    //    }
+    //}
 
     override fun onDestroyView() {
         super.onDestroyView()
