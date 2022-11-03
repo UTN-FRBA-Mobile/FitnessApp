@@ -1,5 +1,6 @@
 package ar.utn.frba.mobile.fitnessapp.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
+import ar.utn.frba.mobile.fitnessapp.model.Gym
 import com.google.android.material.textfield.TextInputEditText
 
 class HomeFragment : Fragment() {
@@ -44,8 +46,10 @@ class HomeFragment : Fragment() {
             viewModel.search(query)
         }
 
+        val fragmentContext = context
         viewModel.searchResults.observe(viewLifecycleOwner) {
-            println(it)
+            val adapter = GymSearchResultAdapter(fragmentContext!!, it)
+            binding.resultList.adapter = adapter
         }
     }
 

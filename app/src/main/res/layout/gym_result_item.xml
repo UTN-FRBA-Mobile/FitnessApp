@@ -38,6 +38,7 @@
                 tools:text="Nombre del Gimnasio" />
 
             <TextView
+                android:id="@+id/gymAddress"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="5dp"
