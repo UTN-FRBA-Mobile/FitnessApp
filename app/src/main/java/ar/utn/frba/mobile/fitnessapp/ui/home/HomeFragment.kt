@@ -20,8 +20,6 @@ import ar.utn.frba.mobile.fitnessapp.model.Gym
 import com.google.android.material.textfield.TextInputEditText
 
 class HomeFragment : Fragment() {
-    private var showBG: Boolean = true
-
     private val viewModel: HomeViewModel by viewModels()
 
     // This property is only valid between onCreateView and
@@ -47,9 +45,8 @@ class HomeFragment : Fragment() {
             viewModel.search(query)
         }
 
-        val fragmentContext = context
-        viewModel.searchResults.observe(viewLifecycleOwner) {
-            val adapter = GymSearchResultAdapter(fragmentContext!!, it)
+        viewModel.searchResults.observe(viewLifecycleOwner) { arrayList ->
+            val adapter = GymSearchResultAdapter(requireContext(), arrayList)
             val resultList = binding.resultList
             resultList.adapter = adapter
 
@@ -57,7 +54,6 @@ class HomeFragment : Fragment() {
                 val gym: Gym = parent.getItemAtPosition(position) as Gym
                 Toast.makeText(context, "Cliquié el gimnasio ${gym.name}!", Toast.LENGTH_LONG).show()
             }
-
         }
     }
 
