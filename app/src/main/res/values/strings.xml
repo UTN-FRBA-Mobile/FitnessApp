@@ -31,6 +31,8 @@
     <string name="permissionGranted">Permission granted</string>
     <string name="permissionBlocked">Permission blocked</string>
 
-    <string name="gymAvatar">Imagen miniatura del gimnasio</string>
+    <string name="gymAvatar">Miniature image of the gym</string>
+    <string name="searchbarHint">Search</string>
+    <string name="searchButtonDesc">Search button</string>
 
 </resources>

@@ -39,8 +39,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchButton.setOnClickListener {
-            val searchQuery: EditText = binding.searchQuery
-            val query: String = searchQuery.text.toString()
+            val searchbar: EditText = binding.searchbar
+            val query: String = searchbar.text.toString()
             viewModel.search(query)
         }
 
