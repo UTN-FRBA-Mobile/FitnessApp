@@ -11,12 +11,15 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/cardview_shadow_start_color"
             android:layout_marginVertical="10dp"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                app:circularflow_radiusInDP="100"
+                android:background="@color/darkGray"
                 android:id="@+id/gymAvatar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -25,30 +28,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <TextView
-                android:id="@+id/gymName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/gymAvatar"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Nombre del Gimnasio" />
-
-            <TextView
-                android:id="@+id/gymAddress"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@color/white"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:orientation="vertical"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:textSize="12sp"
+                android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/gymAvatar"
-                app:layout_constraintTop_toBottomOf="@+id/gymName"
-                tools:text="Direccion" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/gymName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Nombre del Gimnasio" />
+
+                <TextView
+                    android:id="@+id/gymAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gymName"
+                    tools:text="Direccion" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
