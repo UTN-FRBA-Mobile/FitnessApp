@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -49,7 +50,14 @@ class HomeFragment : Fragment() {
         val fragmentContext = context
         viewModel.searchResults.observe(viewLifecycleOwner) {
             val adapter = GymSearchResultAdapter(fragmentContext!!, it)
-            binding.resultList.adapter = adapter
+            val resultList = binding.resultList
+            resultList.adapter = adapter
+
+            resultList.setOnItemClickListener { parent, _, position, _ ->
+                val gym: Gym = parent.getItemAtPosition(position) as Gym
+                Toast.makeText(context, "Cliquié el gimnasio ${gym.name}!", Toast.LENGTH_LONG).show()
+            }
+
         }
     }
 
