@@ -13,10 +13,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import ar.utn.frba.mobile.fitnessapp.MainActivity
 import ar.utn.frba.mobile.fitnessapp.databinding.ActivityLoginBinding
 
 import ar.utn.frba.mobile.fitnessapp.R
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -85,17 +87,21 @@ class LoginActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
+                        lifecycleScope.launch {
+                            loginViewModel.login(
+                                username.text.toString(),
+                                password.text.toString()
+                            )
+                        }
                 }
                 false
             }
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                lifecycleScope.launch {
+                    loginViewModel.login(username.text.toString(), password.text.toString())
+                }
             }
         }
     }
