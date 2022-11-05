@@ -137,4 +137,8 @@ class MainActivity : AppCompatActivity() {
     private fun hideBottomNav() {
         binding.navView.visibility = View.GONE
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
 }
