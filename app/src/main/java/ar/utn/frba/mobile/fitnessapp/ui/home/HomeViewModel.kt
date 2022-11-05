@@ -19,10 +19,10 @@ class HomeViewModel : ViewModel() {
     fun search(query: String = "") {
         // TODO: Request gyms using a string
         if (query == "") {
-            _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Aca a la vuelta", address="A la vuelta te dije salame"),
-                                               Gym(avatar=Uri.EMPTY, name="Un gimnasio re copado", address="Aca nomas, re tranca"))
+            _searchResults.value = arrayListOf(Gym(avatar="", name="Aca a la vuelta",           address="A la vuelta te dije salame"),
+                                               Gym(avatar="", name="Un gimnasio re copado",     address="Aca nomas, re tranca"))
         } else {
-            _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Un gimnasio que busqué yo", address="Me invito un amigo, yo ke se"))
+            _searchResults.value = arrayListOf(Gym(avatar="", name="Un gimnasio que busqué yo", address="Me invito un amigo, yo ke se"))
         }
     }
 }

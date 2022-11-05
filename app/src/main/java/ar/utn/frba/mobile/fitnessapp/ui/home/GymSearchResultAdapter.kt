@@ -2,6 +2,7 @@ package ar.utn.frba.mobile.fitnessapp.ui.home
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,7 @@ class GymSearchResultAdapter(private val currContext: Context, private val array
         val gymAddress: TextView = view.findViewById(R.id.gymAddress)
 
         val gym = arrayList[position]
-        gymAvatar.setImageURI(gym.avatar)
+        gymAvatar.setImageURI(Uri.parse(gym.avatar))
         gymName.text = gym.name
         gymAddress.text = gym.address
 

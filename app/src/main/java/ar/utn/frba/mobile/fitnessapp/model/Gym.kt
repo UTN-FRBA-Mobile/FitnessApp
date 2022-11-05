@@ -1,9 +1,12 @@
 package ar.utn.frba.mobile.fitnessapp.model
 
-import android.net.Uri
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class Gym(
-    val avatar:  Uri,
+
+@Parcelize
+data class Gym (
+    val avatar:  String,
     val name:    String,
     val address: String
-)
+) : Parcelable
