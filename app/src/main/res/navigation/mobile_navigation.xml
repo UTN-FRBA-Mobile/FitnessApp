@@ -41,8 +41,8 @@
     <fragment
         android:id="@+id/classesFragment"
         android:name="ar.utn.frba.mobile.fitnessapp.ui.classes.ClassesFragment"
-        android:label="fragment_classes"
-        tools:layout="@layout/fragment_classes" >
+        android:label="Classes"
+        tools:layout="@layout/fragment_classes">
         <argument
             android:name="gym"
             app:argType="ar.utn.frba.mobile.fitnessapp.model.Gym" />
