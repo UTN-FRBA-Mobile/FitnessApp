@@ -13,14 +13,16 @@ class HomeViewModel : ViewModel() {
     val searchResults: LiveData<ArrayList<Gym>> = _searchResults
 
     init {
-        // TODO: Request initial search results
-        _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Aca a la vuelta", address="A la vuelta te dije salame"),
-                                           Gym(avatar=Uri.EMPTY, name="Un gimnasio re copado", address="Aca nomas, re tranca"))
+        search()
     }
 
-    fun search(query: String) {
+    fun search(query: String = "") {
         // TODO: Request gyms using a string
-        println("Querying: $query")
-        _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Un gimnasio que busqué yo", address="Me invito un amigo, yo ke se"))
+        if (query == "") {
+            _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Aca a la vuelta", address="A la vuelta te dije salame"),
+                                               Gym(avatar=Uri.EMPTY, name="Un gimnasio re copado", address="Aca nomas, re tranca"))
+        } else {
+            _searchResults.value = arrayListOf(Gym(avatar=Uri.EMPTY, name="Un gimnasio que busqué yo", address="Me invito un amigo, yo ke se"))
+        }
     }
 }

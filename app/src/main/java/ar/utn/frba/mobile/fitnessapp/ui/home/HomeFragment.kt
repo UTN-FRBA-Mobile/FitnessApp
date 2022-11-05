@@ -2,6 +2,7 @@ package ar.utn.frba.mobile.fitnessapp.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,8 +40,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.searchButton.setOnClickListener {
-            val searchbar: EditText = binding.searchbar
+        val searchbar = binding.searchbar
+        val searchButton = binding.searchButton
+
+        // Enter Key in searchbar raises the searchButton's onClick event.
+        searchbar.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if(v.isFocused && keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                searchButton.performClick()
+                return@OnKeyListener true
+            }
+
+            false
+        })
+
+        searchButton.setOnClickListener {
             val query: String = searchbar.text.toString()
             viewModel.search(query)
         }
