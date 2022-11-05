@@ -70,13 +70,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    //override fun onStart() {
-    //    super.onStart()
-    //    showBG = MyPreferences.isShowBGsPreferredView(context!!)
-    //    if(showBG){
-    //        activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax);
-    //    }
-    //}
+    override fun onStart() {
+        super.onStart()
+        val showBG = MyPreferences.isShowBGsPreferredView(requireContext())
+        if(showBG){
+            activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax);
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
