@@ -4,4 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="image_size">80dp</dimen>
+    <dimen name="details_img_height">300dp</dimen>
+    <dimen name="details_content_margin_left">15dp</dimen>
+    <dimen name="details_imglogo_dim">100dp</dimen>
+    <dimen name="details_imglogo_dim_half">50dp</dimen>
+    <dimen name="details_imglogo_dim_quarter">25dp</dimen>
+    <dimen name="details_imglogo_dim_half_negative">-50dp</dimen>
 </resources>

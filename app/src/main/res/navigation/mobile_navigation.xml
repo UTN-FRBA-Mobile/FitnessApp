@@ -34,4 +34,9 @@
         android:name="ar.utn.frba.mobile.fitnessapp.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/navigation_details"
+        android:name="ar.utn.frba.mobile.fitnessapp.ui.details.DetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_details" />
 </navigation>
