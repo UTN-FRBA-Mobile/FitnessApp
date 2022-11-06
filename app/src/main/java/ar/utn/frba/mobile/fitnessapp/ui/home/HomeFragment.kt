@@ -1,10 +1,13 @@
 package ar.utn.frba.mobile.fitnessapp.ui.home
 
+import android.app.Activity
+import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -57,6 +60,7 @@ class HomeFragment : Fragment() {
         })
 
         searchButton.setOnClickListener {
+            hideKeyBoard(it)
             val query: String = searchbar.text.toString()
             viewModel.search(query)
         }
@@ -85,5 +89,10 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun hideKeyBoard(view: View) {
+        val inputManager = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

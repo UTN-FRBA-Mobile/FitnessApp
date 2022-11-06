@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
@@ -19,6 +20,7 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val view: View = inflater.inflate(R.layout.class_info_item, null)
 
+        val classCard: CardView = view.findViewById(R.id.classCard)
         val cardInfo: ConstraintLayout = view.findViewById(R.id.cardInfo)
 
         val gymClassType: TextView = view.findViewById(R.id.classType)
@@ -37,8 +39,18 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
         gymClassPeopleStatus.text = peopleStatus
 
         if (gymClass.people >= gymClass.maxCapacity) {
-            val notAvailableColor = currContext.resources.getColor(R.color.purple_200)
-            cardInfo.setBackgroundColor(notAvailableColor)
+            val notAvailableColorPrimary =
+                currContext.resources.getColor(R.color.classUnavailablePrimary, currContext.theme)
+            val notAvailableColorSecondary =
+                currContext.resources.getColor(R.color.classUnavailableSecondary, currContext.theme)
+
+            val cornerRadius =
+                currContext.resources.getDimension(R.dimen.cardCornerRadius)
+
+            classCard.setBackgroundColor(notAvailableColorSecondary)
+            classCard.radius = cornerRadius
+
+            cardInfo.setBackgroundColor(notAvailableColorPrimary)
         }
 
         return view
