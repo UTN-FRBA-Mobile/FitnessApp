@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
             val subFragments = setOf(
                 R.id.classesFragment,
-                R.id.detailsFragment
+                R.id.navigation_details
             )
 
             if (destination.id in subFragments) {
