@@ -75,7 +75,7 @@ class HomeFragment : Fragment() {
 
             resultList.setOnItemClickListener { parent, _, position, _ ->
                 val gym: Gym = parent.getItemAtPosition(position) as Gym
-                val action = HomeFragmentDirections.actionNavigationHomeToClassesFragment(gym)
+                val action = HomeFragmentDirections.actionNavigationHomeToDetailsFragment(gym)
                 navController.navigate(action)
             }
         }

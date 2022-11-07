@@ -121,7 +121,8 @@ class MainActivity : AppCompatActivity() {
             showBottomNav()
 
             val subFragments = setOf(
-                R.id.classesFragment
+                R.id.classesFragment,
+                R.id.detailsFragment
             )
 
             if (destination.id in subFragments) {

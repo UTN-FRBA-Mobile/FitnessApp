@@ -11,8 +11,8 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_classesFragment"
-            app:destination="@id/classesFragment" />
+            android:id="@+id/action_navigation_home_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
     <fragment
@@ -43,6 +43,18 @@
         android:name="ar.utn.frba.mobile.fitnessapp.ui.classes.ClassesFragment"
         android:label="Classes"
         tools:layout="@layout/fragment_classes">
+        <argument
+            android:name="gym"
+            app:argType="ar.utn.frba.mobile.fitnessapp.model.Gym" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="ar.utn.frba.mobile.fitnessapp.ui.details.DetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/action_detailsFragment_to_classesFragment"
+            app:destination="@id/classesFragment" />
         <argument
             android:name="gym"
             app:argType="ar.utn.frba.mobile.fitnessapp.model.Gym" />
