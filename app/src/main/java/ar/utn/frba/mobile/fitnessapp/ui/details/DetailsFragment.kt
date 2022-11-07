@@ -54,12 +54,15 @@ class DetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        //binding.detScrollview.viewTreeObserver.addOnScrollChangedListener{
-        //    val scrollY = Math.min(Math.max(binding.detScrollview.scrollY, 0), carouselHeight)
-        //    binding.detGymImages.translationY = (scrollY / 2.0).toFloat()
-        //    binding.detImagesCarousel.translationY = (scrollY / 2.0).toFloat()
-        //    //val alpha = scrollY / mImageViewHeight as Float
-        //}
+        binding.detScrollview.viewTreeObserver.addOnScrollChangedListener {
+            if (_binding != null) {
+                val scrollY = Math.min(Math.max(binding.detScrollview.scrollY, 0), carouselHeight)
+                binding.detGymImages.translationY = (scrollY / 2.0).toFloat()
+                binding.detImagesCarousel.translationY = (scrollY / 2.0).toFloat()
+                //val alpha = scrollY / mImageViewHeight as Float
+            }
+        }
+
         val carousel = binding.detImagesCarousel
         carousel.registerLifecycle(lifecycle)
         val img_list = listOf(
