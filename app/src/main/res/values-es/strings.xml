@@ -36,4 +36,5 @@
 
     <string name="gymDistancePlaceholder">Distancia:</string>
     <string name="meterUnitDescription">metros</string>
+    <string name="kilometerUnitDescription">km</string>
 </resources>

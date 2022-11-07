@@ -1,6 +1,7 @@
 package ar.utn.frba.mobile.fitnessapp.ui.home
 
 import android.content.Context
+import android.location.Location
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.Gym
-import ar.utn.frba.mobile.fitnessapp.model.Location
+import ar.utn.frba.mobile.fitnessapp.model.asLocatable
 
 class GymSearchResultAdapter(private val currContext: Context, private val location: Location, private val arrayList: ArrayList<Gym>)
     : ArrayAdapter<Gym>(currContext, R.layout.gym_result_item, arrayList) {
@@ -27,8 +28,14 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
         gymAvatar.setImageURI(Uri.parse(gym.avatar))
         gymName.text = gym.name
         val distancePlaceholder = currContext.resources.getString(R.string.gymDistancePlaceholder)
-        val meterUnitDesc = currContext.resources.getString(R.string.meterUnitDescription)
-        val distanceMsg = "$distancePlaceholder ${location.distance(gym.location)} $meterUnitDesc"
+
+        var distance = location.asLocatable().distance(gym.location)
+        var unitDesc = currContext.resources.getString(R.string.meterUnitDescription)
+        if (distance > 1000) {
+            unitDesc = currContext.resources.getString(R.string.kilometerUnitDescription)
+            distance /= 1000
+        }
+        val distanceMsg = "$distancePlaceholder $distance $unitDesc"
         gymDistance.text = distanceMsg
 
         return view

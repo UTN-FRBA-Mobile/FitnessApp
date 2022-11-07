@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
 import ar.utn.frba.mobile.fitnessapp.model.Location
+import ar.utn.frba.mobile.fitnessapp.model.asLocatable
 
 class HomeViewModel : ViewModel() {
     private val _searchResults = MutableLiveData<ArrayList<Gym>>().apply {
@@ -13,7 +14,7 @@ class HomeViewModel : ViewModel() {
     }
     val searchResults: LiveData<ArrayList<Gym>> = _searchResults
 
-    fun search(location: Location, query: String = "") {
+    fun search(location: android.location.Location, query: String = "") {
         // TODO: Request gyms using a string
         val exampleClasses = arrayListOf(
             GymClass(id = 1,
@@ -50,6 +51,6 @@ class HomeViewModel : ViewModel() {
                                            classes=exampleClasses))
         }
 
-        _searchResults.value = ArrayList(queryResults.sortedBy { it.distance(location) })
+        _searchResults.value = ArrayList(queryResults.sortedBy { it.distance(location.asLocatable()) })
     }
 }
