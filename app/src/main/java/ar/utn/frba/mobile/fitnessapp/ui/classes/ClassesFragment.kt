@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.viewModels
+import android.widget.ListView
 import androidx.navigation.fragment.navArgs
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentClassesBinding
-import ar.utn.frba.mobile.fitnessapp.model.GymClass
 
 class ClassesFragment : Fragment() {
     // This property is only valid between onCreateView and
@@ -22,8 +20,6 @@ class ClassesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: ClassesFragmentArgs by navArgs()
-    private val viewModel: ClassesViewModel by viewModels { ClassesViewModelFactory(args.gym) }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,17 +30,15 @@ class ClassesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.gymClasses.observe(viewLifecycleOwner) { arrayList ->
-            val adapter = GymClassAdapter(requireContext(), arrayList)
-            val classList = binding.classList
-            classList.adapter = adapter
+        super.onViewCreated(view, savedInstanceState)
 
-            classList.setOnItemClickListener { parent, _, position, _ ->
-                val gymClass = parent.getItemAtPosition(position)
-                println("Click: $gymClass")
-            }
+        val adapter = GymClassAdapter(requireContext(), args.gym.classes)
+        val classList: ListView = binding.classList
+        classList.adapter = adapter
+        classList.setOnItemClickListener { parent, _, position, _ ->
+            val gymClass = parent.getItemAtPosition(position)
+            println("Click: $gymClass")
         }
-        return super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {

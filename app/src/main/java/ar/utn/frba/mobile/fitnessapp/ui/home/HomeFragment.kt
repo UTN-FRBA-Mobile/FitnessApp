@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -18,6 +19,7 @@ import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
+import ar.utn.frba.mobile.fitnessapp.model.Location
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
+        viewModel.search(currentLocation())
     }
 
     override fun onCreateView(
@@ -62,11 +65,11 @@ class HomeFragment : Fragment() {
         searchButton.setOnClickListener {
             hideKeyBoard(it)
             val query: String = searchbar.text.toString()
-            viewModel.search(query)
+            viewModel.search(currentLocation(), query)
         }
 
         viewModel.searchResults.observe(viewLifecycleOwner) { arrayList ->
-            val adapter = GymSearchResultAdapter(requireContext(), arrayList)
+            val adapter = GymSearchResultAdapter(requireContext(), currentLocation(), arrayList)
             val resultList = binding.resultList
             resultList.adapter = adapter
 
@@ -94,5 +97,9 @@ class HomeFragment : Fragment() {
     private fun hideKeyBoard(view: View) {
         val inputManager = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun currentLocation(): Location {
+        return Location(latitude=1.0, longitude=30.0)
     }
 }

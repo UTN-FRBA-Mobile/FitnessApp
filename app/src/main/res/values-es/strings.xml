@@ -33,4 +33,7 @@
     <string name="gymAvatar">Imagen miniatura del gimnasio</string>
     <string name="searchbarHint">Buscar</string>
     <string name="searchButtonDesc">Botón de búsqueda</string>
+
+    <string name="gymDistancePlaceholder">Distancia:</string>
+    <string name="meterUnitDescription">metros</string>
 </resources>

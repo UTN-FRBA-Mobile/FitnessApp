@@ -35,4 +35,6 @@
     <string name="searchbarHint">Search</string>
     <string name="searchButtonDesc">Search button</string>
 
+    <string name="gymDistancePlaceholder">Distance:</string>
+    <string name="meterUnitDescription">meters</string>
 </resources>
