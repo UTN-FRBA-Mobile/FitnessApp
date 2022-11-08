@@ -42,7 +42,7 @@ class HomeViewModel : ViewModel() {
             queryResults = arrayListOf(Gym(id=2,
                                            avatar="",
                                            name="Aca a la vuelta",
-                                           location=Location(latitude=1.0, longitude=1.0),
+                                           location=Location(latitude=1.01, longitude=1.0),
                                            classes=exampleClasses),
                                        Gym(id=3,
                                            avatar="",

@@ -97,6 +97,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun currentLocation(): android.location.Location {
-        return Location(latitude=1.0, longitude=30.0).androidLocation()
+        return Location(latitude=1.0, longitude=1.003).androidLocation()
     }
 }

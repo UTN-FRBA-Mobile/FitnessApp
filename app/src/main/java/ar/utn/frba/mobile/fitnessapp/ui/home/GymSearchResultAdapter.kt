@@ -35,7 +35,7 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
             unitDesc = currContext.resources.getString(R.string.kilometerUnitDescription)
             distance /= 1000
         }
-        val distanceMsg = "$distancePlaceholder $distance $unitDesc"
+        val distanceMsg = "$distancePlaceholder ${String.format("%.2f", distance)} $unitDesc"
         gymDistance.text = distanceMsg
 
         return view
