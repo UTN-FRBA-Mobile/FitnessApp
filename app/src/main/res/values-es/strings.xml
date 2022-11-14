@@ -30,4 +30,10 @@
     <string name="permissionGranted">Permiso concedido</string>
     <string name="permissionBlocked">SE TE HA PROHIBIDO LA SOLICITUD. Lo siento :(</string>
 
+    <string name="gymAvatar">Imagen miniatura del gimnasio</string>
+    <string name="searchbarHint">Buscar</string>
+    <string name="searchButtonDesc">Botón de búsqueda</string>
+
+    <string name="gymDistancePlaceholder">Distancia:</string>
+    <string name="meterUnitDescription">metros</string>
 </resources>

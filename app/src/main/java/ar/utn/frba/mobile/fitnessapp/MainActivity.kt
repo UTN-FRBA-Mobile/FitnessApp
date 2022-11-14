@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,6 +21,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        setBottomNavVisibility()
 
         setFirebaseTokenInView()
         binding.reloadButton.setOnClickListener { setFirebaseTokenInView() }
@@ -113,4 +116,30 @@ class MainActivity : AppCompatActivity() {
         clipboard.setPrimaryClip(clip)
     }
 
+    private fun setBottomNavVisibility() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            showBottomNav()
+
+            val subFragments = setOf(
+                R.id.classesFragment,
+                R.id.detailsFragment
+            )
+
+            if (destination.id in subFragments) {
+                hideBottomNav()
+            }
+        }
+    }
+
+    private fun showBottomNav() {
+        binding.navView.visibility = View.VISIBLE
+    }
+
+    private fun hideBottomNav() {
+        binding.navView.visibility = View.GONE
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
 }

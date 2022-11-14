@@ -40,4 +40,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <string name="gymAvatar">Miniature image of the gym</string>
+    <string name="searchbarHint">Search</string>
+    <string name="searchButtonDesc">Search button</string>
+
+    <string name="gymDistancePlaceholder">Distance:</string>
+    <string name="meterUnitDescription">meters</string>
 </resources>
