@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -55,13 +56,13 @@ class MainActivity : AppCompatActivity() {
         binding.subscribeButton.setOnClickListener { subscribeToTopic() }
     }
 
-    fun onCheckboxClicked(view: View) {
+    fun onCheckboxClicked(view: View) { //todo mover al settings fragment?
         if (view is CheckBox) {
             val checked: Boolean = view.isChecked
 
             when (view.id) {
                 R.id.check_bg -> {
-                    val settingsScreen = findViewById<ConstraintLayout>(R.id.settingsScreen)
+                    val settingsScreen = findViewById<ScrollView>(R.id.settingsScreen)
                     if (checked) {
                         MyPreferences.setShowBGsPreferredView(this, true)
                         settingsScreen?.setBackgroundResource(R.drawable.bg_beachx);
