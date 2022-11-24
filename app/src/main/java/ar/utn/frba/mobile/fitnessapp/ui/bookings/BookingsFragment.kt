@@ -28,7 +28,6 @@ class BookingsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BookingsViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
