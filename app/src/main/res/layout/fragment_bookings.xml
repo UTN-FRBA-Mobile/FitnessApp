@@ -18,7 +18,8 @@
             <com.applandeo.materialcalendarview.CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -66,14 +67,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/book_btn_cancelclass"
+                    android:id="@+id/book_btn_unbook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="#FEFEFE"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
-                    android:text="Cancel"
+                    android:text="Unbook"
                     android:textColor="#FF8787"
                     android:textStyle="normal"
                     app:cornerRadius="15dp"
@@ -87,7 +88,7 @@
                     android:layout_weight="0" />
 
                 <Button
-                    android:id="@+id/book_btn_reviewclass"
+                    android:id="@+id/book_btn_review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
