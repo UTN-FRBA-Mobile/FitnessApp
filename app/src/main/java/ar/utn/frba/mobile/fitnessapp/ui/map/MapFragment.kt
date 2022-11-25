@@ -69,7 +69,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Toast.makeText(activity, "No Gyms founds!", Toast.LENGTH_SHORT).show()
             }
         })
-        showBG = MyPreferences.isShowBGsPreferredView(context!!)
+        showBG = MyPreferences.isShowBGsPreferredView(requireContext())
         if (showBG) {
             activity?.findViewById<ConstraintLayout>(R.id.mapScreen)
                 ?.setBackgroundResource(R.drawable.bg_proteinx)
