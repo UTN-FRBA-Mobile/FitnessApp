@@ -91,14 +91,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val position = LatLng(gym.location.latitude, gym.location.longitude)
         mMap.addMarker(MarkerOptions().position(position).title(gym.name))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position))
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11F), 2000, null)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
         // Add a marker in Buenos Aires
-        val sydney = LatLng(-34.6, -58.3)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Buenos Aires"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val buenosAires = LatLng(-34.6, -58.3)
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Buenos Aires"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(buenosAires))
     }
 }
