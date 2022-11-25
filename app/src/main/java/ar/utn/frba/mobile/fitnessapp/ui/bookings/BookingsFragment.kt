@@ -1,7 +1,6 @@
 package ar.utn.frba.mobile.fitnessapp.ui.bookings
 
 //import android.R
-import ar.utn.frba.mobile.fitnessapp.R
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -10,8 +9,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentBookingsBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
@@ -77,9 +78,28 @@ class BookingsFragment : Fragment() {
         return cal
     }
 
+    private fun stringdateRemoveHMS(string: String): String{ //TODO(fran): horrible name and horrible function
+        val res = string.substringBefore(' ')
+        return res
+    }
+    private fun calendarToString(cal: Calendar): String{
+        val res = SimpleDateFormat("yyyy-MM-dd").format(cal.time)
+        return res
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         _binding = FragmentBookingsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private fun shuffleString(string: String): String {
+        val shuffled = string.split(' ').toMutableList()
+        shuffled.shuffle()
+        var res = ""
+        for (word in shuffled) {
+            res += word + " "
+        }
+        return res
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,12 +121,50 @@ class BookingsFragment : Fragment() {
 
         binding.calendarView.setMinimumDate(min_date)
         binding.calendarView.setMaximumDate(max_date)
+        binding.calendarView.clearSelectedDays()
 
         binding.calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
                 val clickedDayCalendar: Calendar = eventDay.calendar
+
+                val booking = userClasses.find { stringdateRemoveHMS(it.startDate) == calendarToString(clickedDayCalendar) }
+                //TODO?(fran): instead of having to check in this very poor man's way we could subclass EventDay and add the information of the class inside, though that may cause
+                //outdated state issues
+
+                if(booking!=null){
+                    val startDate = stringToCalendar(booking.startDate)
+                    val endDate = stringToCalendar(booking.endDate)
+                    binding.bookClassTitle.text = booking.type + "\n" + booking.startDate + " - " + booking.endDate //TODO(fran): remove year & secs and prittier text eg 'Sat 12 of Aug 12:30'
+                    binding.bookClassDesc.text = shuffleString("Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator") //TODO: retrieve real gym class description
+                    binding.bookBtnReview.isEnabled = true
+                    binding.bookBtnUnbook.isEnabled = true
+
+                    //binding.calendarView.clearSelectedDays()
+                    //binding.calendarView.selectedDates = listOf(clickedDayCalendar)
+                    //Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
+                }
+                else{
+                    //binding.calendarView.clearSelectedDays()
+                    //Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
+
+                    binding.bookClassTitle.text = ""
+                    binding.bookClassDesc.text = ""
+                    binding.bookBtnReview.isEnabled = false
+                    binding.bookBtnUnbook.isEnabled = false
+                }
             }
         })
+
+        binding.bookBtnReview.isEnabled = false //TODO(fran): better looking disabled buttons
+        binding.bookBtnReview.setOnClickListener { /*TODO(fran): should this even exist or is the info on the class description enough?*/  }
+
+        binding.bookBtnUnbook.isEnabled = false //TODO(fran): better looking disabled buttons
+        binding.bookBtnUnbook.setOnClickListener {
+            Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
+            //INFO: At this point 'binding.calendarView.firstSelectedDate' always has a valid date that corresponds to a gym class
+            /*TODO(fran): unbook class*/
+        }
+
     }
 
 }

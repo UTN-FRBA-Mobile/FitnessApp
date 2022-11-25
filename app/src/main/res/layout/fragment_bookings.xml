@@ -43,16 +43,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="Class - Time"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:text="TITLE - TIME"/>
 
                     <TextView
                         android:id="@+id/book_class_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator" />
+                        tools:text="Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator"/>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -99,6 +99,10 @@
                     android:textStyle="bold"
                     app:cornerRadius="15dp" />
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
         </LinearLayout>
     </ScrollView>
 
