@@ -14,7 +14,7 @@ class HomeViewModel : ViewModel() {
     }
     val searchResults: LiveData<ArrayList<Gym>> = _searchResults
 
-    fun search(location: android.location.Location, query: String = "") {
+    fun search(query: String = "", location: android.location.Location? = null) {
         // TODO: Request gyms using a string
         val exampleClasses = arrayListOf(
             GymClass(id = 1,
@@ -33,24 +33,29 @@ class HomeViewModel : ViewModel() {
                      maxCapacity = 15)
         )
 
-        var queryResults = arrayListOf(Gym(id=1,
-                                           avatar="",
-                                           name="Un gimnasio que busqué yo",
-                                           location=Location(latitude=1.0, longitude=1.0),
-                                           classes=exampleClasses))
+        var queryResults = listOf(Gym(id=1,
+                                      avatar="",
+                                      name="Un gimnasio que busqué yo",
+                                      location=Location(latitude=1.0, longitude=1.0),
+                                      classes=exampleClasses))
         if (query == "") {
-            queryResults = arrayListOf(Gym(id=2,
-                                           avatar="",
-                                           name="Aca a la vuelta",
-                                           location=Location(latitude=1.01, longitude=1.0),
-                                           classes=exampleClasses),
-                                       Gym(id=3,
-                                           avatar="",
-                                           name="Un gimnasio re copado",
-                                           location=Location(latitude=1.0, longitude=1.0),
-                                           classes=exampleClasses))
+            queryResults = listOf(Gym(id=2,
+                                      avatar="",
+                                      name="Aca a la vuelta",
+                                      location=Location(latitude=1.01, longitude=1.0),
+                                      classes=exampleClasses),
+                                  Gym(id=3,
+                                      avatar="",
+                                      name="Un gimnasio re copado",
+                                      location=Location(latitude=1.0, longitude=1.0),
+                                      classes=exampleClasses))
         }
 
-        _searchResults.value = ArrayList(queryResults.sortedBy { it.distance(location.asLocatable()) })
+        var results = queryResults
+        if (location != null) {
+            results = queryResults.sortedBy { it.distance(location.asLocatable()) }
+        }
+
+        _searchResults.value = ArrayList(results)
     }
 }

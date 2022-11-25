@@ -1,5 +1,6 @@
 package ar.utn.frba.mobile.fitnessapp.ui.home
 
+import android.Manifest
 import android.app.Activity
 import android.os.Bundle
 import android.view.KeyEvent
@@ -13,10 +14,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
+import ar.utn.frba.mobile.fitnessapp.Permissions
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
-import ar.utn.frba.mobile.fitnessapp.model.Location
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
@@ -27,11 +31,13 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var navController: NavController
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
-        viewModel.search(currentLocation())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
+        viewModel.search()
     }
 
     override fun onCreateView(
@@ -49,6 +55,11 @@ class HomeFragment : Fragment() {
         val searchbar = binding.searchbar
         val searchButton = binding.searchButton
 
+        var location: android.location.Location? = null
+        if (checkLocationPermissions()) {
+            location = lastLocation()
+        }
+
         // Enter Key in searchbar raises the searchButton's onClick event.
         searchbar.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if(v.isFocused && keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -59,14 +70,14 @@ class HomeFragment : Fragment() {
             false
         })
 
-        searchButton.setOnClickListener {
+        searchButton.setOnClickListener { it ->
             hideKeyBoard(it)
             val query: String = searchbar.text.toString()
-            viewModel.search(currentLocation(), query)
+            viewModel.search(query, location)
         }
 
         viewModel.searchResults.observe(viewLifecycleOwner) { arrayList ->
-            val adapter = GymSearchResultAdapter(requireContext(), currentLocation(), arrayList)
+            val adapter = GymSearchResultAdapter(requireContext(), location, arrayList)
             val resultList = binding.resultList
             resultList.adapter = adapter
 
@@ -91,12 +102,28 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    private fun lastLocation(): android.location.Location? {
+        var location: android.location.Location? = null
+
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener {
+            println(it)
+            location = it
+        }
+
+        return location
+    }
+
     private fun hideKeyBoard(view: View) {
         val inputManager = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun currentLocation(): android.location.Location {
-        return Location(latitude=1.0, longitude=1.003).androidLocation()
+    private fun checkLocationPermissions(): Boolean {
+        return Permissions.checkForPermissions(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            100,
+            "Fitness App necesita poder acceder a tu ubicacion para poder arrojarte mejores resultados de búsqueda."
+        )
     }
 }

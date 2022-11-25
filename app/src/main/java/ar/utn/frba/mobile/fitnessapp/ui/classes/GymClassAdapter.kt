@@ -48,9 +48,9 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
                 currContext.resources.getDimension(R.dimen.cardCornerRadius)
 
             classCard.setBackgroundColor(notAvailableColorSecondary)
-            classCard.radius = cornerRadius
-
             cardInfo.setBackgroundColor(notAvailableColorPrimary)
+
+            classCard.radius = cornerRadius
         }
 
         return view

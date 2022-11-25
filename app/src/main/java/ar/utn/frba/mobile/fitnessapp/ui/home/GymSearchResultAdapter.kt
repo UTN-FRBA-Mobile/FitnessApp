@@ -13,7 +13,7 @@ import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.asLocatable
 
-class GymSearchResultAdapter(private val currContext: Context, private val location: Location, private val arrayList: ArrayList<Gym>)
+class GymSearchResultAdapter(private val currContext: Context, private val location: Location?, private val arrayList: ArrayList<Gym>)
     : ArrayAdapter<Gym>(currContext, R.layout.gym_result_item, arrayList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -29,14 +29,18 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
         gymName.text = gym.name
         val distancePlaceholder = currContext.resources.getString(R.string.gymDistancePlaceholder)
 
-        var distance = location.asLocatable().distance(gym.location)
-        var unitDesc = currContext.resources.getString(R.string.meterUnitDescription)
-        if (distance > 1000) {
-            unitDesc = currContext.resources.getString(R.string.kilometerUnitDescription)
-            distance /= 1000
+        gymDistance.text = "???"
+        if (location != null) {
+            var distance = location.asLocatable().distance(gym.location)
+            println(distance)
+            var unitDesc = currContext.resources.getString(R.string.meterUnitDescription)
+            if (distance > 1000) {
+                unitDesc = currContext.resources.getString(R.string.kilometerUnitDescription)
+                distance /= 1000
+            }
+            val distanceMsg = "$distancePlaceholder ${String.format("%.2f", distance)} $unitDesc"
+            gymDistance.text = distanceMsg
         }
-        val distanceMsg = "$distancePlaceholder ${String.format("%.2f", distance)} $unitDesc"
-        gymDistance.text = distanceMsg
 
         return view
     }
