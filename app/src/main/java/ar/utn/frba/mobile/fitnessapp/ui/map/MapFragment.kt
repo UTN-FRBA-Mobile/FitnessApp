@@ -61,13 +61,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         service.getGyms().enqueue(object : Callback<List<Gym>> {
             override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) {
 
-//                tweetsAdapter = TweetsAdapter(listener, response.body()!!)
                 val gyms = response.body()!!
                 gyms.forEach { addMarker(it) }
-//                binding.list.apply {
-//                    layoutManager = LinearLayoutManager(context)
-//                    adapter = tweetsAdapter
-//                }
             }
 
             override fun onFailure(call: Call<List<Gym>>, t: Throwable) {
