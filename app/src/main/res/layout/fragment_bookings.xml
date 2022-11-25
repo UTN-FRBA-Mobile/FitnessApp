@@ -22,6 +22,7 @@
                 android:layout_marginBottom="20dp" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/gym_info_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/details_content_margin_left"
@@ -45,14 +46,23 @@
                         android:gravity="center_horizontal"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        tools:text="TITLE - TIME"/>
+                        tools:text="TITLE" />
+
+                    <TextView
+                        android:id="@+id/book_class_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="13sp"
+                        android:textStyle="italic"
+                        tools:text="TIME" />
 
                     <TextView
                         android:id="@+id/book_class_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        tools:text="Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator"/>
+                        tools:text="Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -65,6 +75,21 @@
                 android:layout_marginRight="@dimen/details_content_margin_left"
                 android:layout_marginBottom="@dimen/details_content_margin_left"
                 android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/book_btn_unbook"
@@ -85,7 +110,8 @@
                 <Space
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/book_btn_review"
@@ -97,6 +123,7 @@
                     android:paddingBottom="15dp"
                     android:text="Review"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:cornerRadius="15dp" />
             </LinearLayout>
 

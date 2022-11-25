@@ -102,6 +102,12 @@ class BookingsFragment : Fragment() {
         return res
     }
 
+    private fun uiClearSelectedGymClass(){
+        binding.bookBtnReview.isEnabled = false //TODO(fran): better looking disabled buttons
+        binding.bookBtnUnbook.isEnabled = false
+        binding.gymInfoCard.visibility = View.GONE
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BookingsViewModel::class.java)
@@ -134,34 +140,31 @@ class BookingsFragment : Fragment() {
                 if(booking!=null){
                     val startDate = stringToCalendar(booking.startDate)
                     val endDate = stringToCalendar(booking.endDate)
-                    binding.bookClassTitle.text = booking.type + "\n" + booking.startDate + " - " + booking.endDate //TODO(fran): remove year & secs and prittier text eg 'Sat 12 of Aug 12:30'
+
+                    binding.bookClassTitle.text = booking.type //TODO(fran): add gym name
+                    binding.bookClassTime.text = //eg 'Sat 12 Aug 12:30 - 13:30'
+                        SimpleDateFormat("EE").format(startDate.time) + " " + startDate.get(Calendar.DAY_OF_MONTH).toString() + " " + SimpleDateFormat("MMM").format(startDate.time) + " " +
+                        startDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ startDate.get(Calendar.MINUTE).toString() + " - " +
+                        endDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ endDate.get(Calendar.MINUTE).toString()
                     binding.bookClassDesc.text = shuffleString("Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator") //TODO: retrieve real gym class description
                     binding.bookBtnReview.isEnabled = true
                     binding.bookBtnUnbook.isEnabled = true
+                    binding.gymInfoCard.visibility = View.VISIBLE
 
-                    //binding.calendarView.clearSelectedDays()
-                    //binding.calendarView.selectedDates = listOf(clickedDayCalendar)
-                    //Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
                 }
                 else{
-                    //binding.calendarView.clearSelectedDays()
-                    //Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
-
-                    binding.bookClassTitle.text = ""
-                    binding.bookClassDesc.text = ""
-                    binding.bookBtnReview.isEnabled = false
-                    binding.bookBtnUnbook.isEnabled = false
+                    uiClearSelectedGymClass()
                 }
             }
         })
 
-        binding.bookBtnReview.isEnabled = false //TODO(fran): better looking disabled buttons
-        binding.bookBtnReview.setOnClickListener { /*TODO(fran): should this even exist or is the info on the class description enough?*/  }
+        uiClearSelectedGymClass()
 
-        binding.bookBtnUnbook.isEnabled = false //TODO(fran): better looking disabled buttons
+        //binding.bookBtnReview.setOnClickListener {  } //NOTE(fran): this need not exist, the info on the class description is enough
+
         binding.bookBtnUnbook.setOnClickListener {
             Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
-            //INFO: At this point 'binding.calendarView.firstSelectedDate' always has a valid date that corresponds to a gym class
+            //INFO: At this point 'binding.calendarView.firstSelectedDate' always has a valid date that corresponds to the currently selected gym class
             /*TODO(fran): unbook class*/
         }
 
