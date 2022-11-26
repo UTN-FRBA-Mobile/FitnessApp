@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.Surface.ROTATION_0
@@ -21,10 +23,16 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.Permissions
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentQrBinding
+import ar.utn.frba.mobile.fitnessapp.model.Gym
+import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import ar.utn.frba.mobile.fitnessapp.model.Location
+import ar.utn.frba.mobile.fitnessapp.ui.home.HomeFragmentDirections
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanner
@@ -58,9 +66,16 @@ class QRFragment : Fragment() {
 
     var mediaPlayer: MediaPlayer? = null
 
+    private lateinit var navController: NavController
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        navController = findNavController()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -336,7 +351,9 @@ class QRFragment : Fragment() {
 
         barcodeScanner.process(inputImage)
             .addOnSuccessListener { barcodes ->
-                barcodes.forEach { barcode ->
+                if(barcodes.isNotEmpty()){
+                    val barcode = barcodes[0]
+
                     val bounds = barcode.boundingBox
                     val corners = barcode.cornerPoints
 
@@ -345,7 +362,6 @@ class QRFragment : Fragment() {
                     resultBox?.setText("QR result: " + barcode.rawValue)
                     resultBox?.setBackgroundColor(Color.BLACK)
 
-                    //Toast.makeText(getActivity(), "puntos: " + corners[0].x + "." + corners[0].y + " " + corners[3].x + "." + corners[3].y, Toast.LENGTH_SHORT).show()
 
                     val centerX = (corners[0].x.toFloat() + corners[1].x.toFloat())/2 * relation
                     val centerY = (corners[0].y.toFloat() + corners[2].y.toFloat())/2 * relation
@@ -356,7 +372,22 @@ class QRFragment : Fragment() {
                     guyPNG?.setVisibility(View.VISIBLE);  // make image visible
                     mediaPlayer?.start()
 
+
                     val valueType = barcode.valueType
+
+                    Toast.makeText(getActivity(), "✨✨✨✨✨✨✨", Toast.LENGTH_SHORT).show()
+
+                    //abrir gym
+                    //todo verificar si existe o no el gym
+                    val gym = Gym(42, "avatar?", barcode.rawValue, Location(42.0, 15.0), arrayListOf())
+                    val action = QRFragmentDirections.actionNavigationQrToDetailsFragment(gym)
+
+                    closeCamera()
+                    val scanButton = activity?.findViewById<Button>(R.id.buttonScan)
+                    scanButton?.setEnabled(false)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        navController.navigate(action)
+                    }, 3_000)
 
                 }
             }
