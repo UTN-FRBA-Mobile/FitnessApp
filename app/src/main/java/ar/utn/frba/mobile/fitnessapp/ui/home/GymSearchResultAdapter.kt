@@ -12,6 +12,7 @@ import android.widget.TextView
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.asLocatable
+import kotlin.math.floor
 
 class GymSearchResultAdapter(private val currContext: Context, private val location: Location?, private val arrayList: ArrayList<Gym>)
     : ArrayAdapter<Gym>(currContext, R.layout.gym_result_item, arrayList) {
@@ -25,7 +26,7 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
         val gymDistance: TextView = view.findViewById(R.id.gymDistance)
 
         val gym = arrayList[position]
-        gymAvatar.setImageURI(Uri.parse(gym.avatar))
+        gymAvatar.setImageResource(randomAvatar())
         gymName.text = gym.name
         val distancePlaceholder = currContext.resources.getString(R.string.gymDistancePlaceholder)
 
@@ -43,5 +44,17 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
         }
 
         return view
+    }
+
+    private fun randomAvatar(): Int {
+        val availableIcons = arrayOf(
+            R.drawable.gym_logo1,
+            R.drawable.gym_logo2,
+            R.drawable.gym_logo3,
+            R.drawable.gym_logo4,
+            R.drawable.gym_logo5
+        )
+        val index = floor(Math.random() * availableIcons.size).toInt()
+        return availableIcons[index]
     }
 }

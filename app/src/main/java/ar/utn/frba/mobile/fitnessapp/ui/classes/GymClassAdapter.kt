@@ -2,6 +2,7 @@ package ar.utn.frba.mobile.fitnessapp.ui.classes
 
 import android.content.Context
 import android.content.res.Resources.Theme
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import java.time.LocalDate
 
 class GymClassAdapter(private val currContext: Context, private val arrayList: ArrayList<GymClass>)
     : ArrayAdapter<GymClass>(currContext, R.layout.class_info_item, arrayList) {
