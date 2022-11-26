@@ -31,7 +31,7 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
 
         Picasso.get()
             .load(Uri.parse("${BackendService.baseUrl}/gyms/${gym.id}/image"))
-            .placeholder(randomAvatar())
+            .placeholder(R.drawable.logo)
             .into(gymAvatar)
 
         gymName.text = gym.name
@@ -51,17 +51,5 @@ class GymSearchResultAdapter(private val currContext: Context, private val locat
         }
 
         return view
-    }
-
-    private fun randomAvatar(): Int {
-        val availableIcons = arrayOf(
-            R.drawable.gym_logo1,
-            R.drawable.gym_logo2,
-            R.drawable.gym_logo3,
-            R.drawable.gym_logo4,
-            R.drawable.gym_logo5
-        )
-        val index = floor(Math.random() * availableIcons.size).toInt()
-        return availableIcons[index]
     }
 }
