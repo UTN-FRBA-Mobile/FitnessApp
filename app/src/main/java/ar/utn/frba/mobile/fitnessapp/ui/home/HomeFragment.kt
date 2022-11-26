@@ -2,6 +2,7 @@ package ar.utn.frba.mobile.fitnessapp.ui.home
 
 import android.Manifest
 import android.app.Activity
+import android.location.Location
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -52,13 +53,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (checkLocationPermissions()) {
+            onLocationFound(this::setupWithLocation)
+        } else {
+            setupWithLocation(null)
+        }
+
         val searchbar = binding.searchbar
         val searchButton = binding.searchButton
-
-        var location: android.location.Location? = null
-        if (checkLocationPermissions()) {
-            location = lastLocation()
-        }
 
         // Enter Key in searchbar raises the searchButton's onClick event.
         searchbar.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -69,8 +71,31 @@ class HomeFragment : Fragment() {
 
             false
         })
+    }
 
-        searchButton.setOnClickListener { it ->
+    override fun onStart() {
+        super.onStart()
+        val showBG = MyPreferences.isShowBGsPreferredView(requireContext())
+        if(showBG){
+            activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun onLocationFound(callback: (Location?) -> Unit) {
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null)
+            .addOnSuccessListener(callback)
+    }
+
+    private fun setupWithLocation(location: Location?) {
+        val searchbar = binding.searchbar
+        val searchButton = binding.searchButton
+
+        searchButton.setOnClickListener {
             hideKeyBoard(it)
             val query: String = searchbar.text.toString()
             viewModel.search(query, location)
@@ -87,30 +112,6 @@ class HomeFragment : Fragment() {
                 navController.navigate(action)
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val showBG = MyPreferences.isShowBGsPreferredView(requireContext())
-        if(showBG){
-            activity?.findViewById<ConstraintLayout>(R.id.homeScreen)?.setBackgroundResource(R.drawable.bg_yogax)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun lastLocation(): android.location.Location? {
-        var location: android.location.Location? = null
-
-        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, null).addOnSuccessListener {
-            println(it)
-            location = it
-        }
-
-        return location
     }
 
     private fun hideKeyBoard(view: View) {
