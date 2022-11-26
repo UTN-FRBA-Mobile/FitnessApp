@@ -41,8 +41,8 @@ class BookingsFragment : Fragment() {
 
     private lateinit var viewModel: BookingsViewModel
 
-    private var selectedDate : Calendar? = null
-    private var selectedGym : Gym? = null
+    //private var selectedDate : Calendar? = null
+    //private var selectedGym : Gym? = null
 
     private var userClasses = mutableListOf(
         GymClass(id=0,gymId=1,type="CrossFit",startDate="2022-12-03T12:30:00",endDate="2022-12-03T13:30:00",professor="Arnold",people=10,maxCapacity=30),
@@ -53,6 +53,8 @@ class BookingsFragment : Fragment() {
     private val backend = BackendService.create()
 
     private val userId : Int = 1
+
+    private var gyms: MutableList<Gym>? = null
 
     private fun getDrawableText(text: String, color: Int, size: Int): Drawable {
         val bitmap = Bitmap.createBitmap(105, 48, Bitmap.Config.ARGB_8888) //TODO(fran): find out a way to retrieve the width and height of the cell
@@ -152,6 +154,11 @@ class BookingsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BookingsViewModel::class.java)
 
+        backend.gyms().enqueue(object : Callback<List<Gym>> {
+            override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) { gyms = response.body()!!.toMutableList() }
+            override fun onFailure(call: Call<List<Gym>>, t: Throwable) { Toast.makeText(activity, "No Gyms found!", Toast.LENGTH_SHORT).show() }
+        })
+
         setCalendarEvents()
 
         val min_date = Calendar.getInstance()
@@ -176,7 +183,8 @@ class BookingsFragment : Fragment() {
                     val startDate = stringToCalendar(booking.startDate)
                     val endDate = stringToCalendar(booking.endDate)
 
-                    binding.bookClassTitle.text = booking.type //TODO(fran): add gym name
+                    val gymName = gyms?.find { it.id==booking.gymId }?.name
+                    binding.bookClassTitle.text = booking.type + if(gymName!=null) " - " + gymName else ""
                     binding.bookClassTime.text = //eg 'Sat 12 Aug 12:30 - 13:30'
                         SimpleDateFormat("EE").format(startDate.time) + " " + startDate.get(Calendar.DAY_OF_MONTH).toString() + " " + SimpleDateFormat("MMM").format(startDate.time) + " " +
                         startDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ startDate.get(Calendar.MINUTE).toString() + " - " +

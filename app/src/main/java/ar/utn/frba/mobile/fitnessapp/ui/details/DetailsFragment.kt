@@ -44,7 +44,7 @@ class DetailsFragment : Fragment() {
         val gym: Gym = args.gym
 
         binding.detGymImages.setImageResource(R.drawable.bg_yoga)
-        binding.detGymLogo.setImageResource(R.drawable.bg_beachx)
+        binding.detGymLogo.setImageResource(R.drawable.bg_beachx) //TODO(fran):
         binding.detGymName.text = gym.name
         binding.detGymContactnfo.text = "[AContact Info]"
         binding.detGymDesc.text = "ALorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
