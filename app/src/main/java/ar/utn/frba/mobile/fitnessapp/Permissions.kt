@@ -16,10 +16,10 @@ object Permissions {
 
     /// Retorna true si ya tiene permiso
     fun checkForPermissions(fragment: Fragment, permissionCode: String, requestCode: Int, reason: String): Boolean {
-        if (hasPermissions(fragment.context!!, permissionCode)) {
+        if (hasPermissions(fragment.requireContext(), permissionCode)) {
             return true
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(fragment.activity!!, permissionCode)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(fragment.requireActivity(), permissionCode)) {
             showStoragePermissionExplanation(fragment, permissionCode, reason, requestCode)
         }
         else {
@@ -29,11 +29,11 @@ object Permissions {
     }
 
     private fun dispatchStoragePermissionRequest(fragment: Fragment, permissionCode: String, requestCode: Int) {
-        fragment.requestPermissions(arrayOf(permissionCode), requestCode)
+        ActivityCompat.requestPermissions(fragment.requireActivity(), arrayOf(permissionCode), requestCode)
     }
 
     private fun showStoragePermissionExplanation(fragment: Fragment, permissionCode: String, reason: String, requestCode: Int) {
-        val builder = AlertDialog.Builder(fragment.context!!)
+        val builder = AlertDialog.Builder(fragment.requireContext())
         builder.setTitle(R.string.permissionTitle)
         builder.setCancelable(true)
         builder.setMessage(reason)
