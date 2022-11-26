@@ -16,8 +16,3 @@ data class Gym(
 ) : Parcelable, Locatable() {
     override fun androidLocation(): android.location.Location = location.androidLocation()
 }
-
-interface GymsService {
-    @GET("gyms")
-    fun getGyms(): Call<List<Gym>>
-}
