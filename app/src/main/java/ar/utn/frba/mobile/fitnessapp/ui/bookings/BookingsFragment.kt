@@ -1,6 +1,8 @@
 package ar.utn.frba.mobile.fitnessapp.ui.bookings
 
 //import android.R
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -10,16 +12,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentBookingsBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
+import ar.utn.frba.mobile.fitnessapp.model.backend.BookingBody
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import java.text.SimpleDateFormat
 import java.util.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class BookingsFragment : Fragment() {
@@ -36,11 +44,15 @@ class BookingsFragment : Fragment() {
     private var selectedDate : Calendar? = null
     private var selectedGym : Gym? = null
 
-    private var userClasses = listOf(
-        GymClass(0,"CrossFit","2022-12-03 12:30:00","2022-12-03 13:30:00","Arnold" ,10,30),
-        GymClass(1,"Spin"    ,"2022-12-04 15:00:00","2022-12-03 16:30:00","Jenny"  ,15,35),
-        GymClass(2,"Yoga"    ,"2022-12-05 19:15:00","2022-12-03 20:15:00","Darrell",20,40),
+    private var userClasses = mutableListOf(
+        GymClass(id=0,gymId=1,type="CrossFit",startDate="2022-12-03T12:30:00",endDate="2022-12-03T13:30:00",professor="Arnold",people=10,maxCapacity=30),
+        GymClass(id=1,gymId=0,type="Spin",startDate="2022-12-04T15:00:00",endDate="2022-12-03T16:30:00",professor="Jenny",people=15,maxCapacity=35),
+        GymClass(id=2,gymId=3,type="Yoga",startDate="2022-12-05T19:15:00",endDate="2022-12-03T20:15:00",professor="Darrell",people=20,maxCapacity=40),
     )
+
+    private val backend = BackendService.create()
+
+    private val userId : Int = 1
 
     private fun getDrawableText(text: String, color: Int, size: Int): Drawable {
         val bitmap = Bitmap.createBitmap(105, 48, Bitmap.Config.ARGB_8888) //TODO(fran): find out a way to retrieve the width and height of the cell
@@ -73,13 +85,13 @@ class BookingsFragment : Fragment() {
 
     private fun stringToCalendar(string: String): Calendar{
         val cal = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         cal.time = dateFormat.parse(string)
         return cal
     }
 
     private fun stringdateRemoveHMS(string: String): String{ //TODO(fran): horrible name and horrible function
-        val res = string.substringBefore(' ')
+        val res = string.substringBefore('T')
         return res
     }
     private fun calendarToString(cal: Calendar): String{
@@ -108,16 +120,39 @@ class BookingsFragment : Fragment() {
         binding.gymInfoCard.visibility = View.GONE
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(BookingsViewModel::class.java)
-
+    private fun setCalendarEvents(){
         var events = mutableListOf<EventDay>()
 
         userClasses.forEach {
             events.add(EventDay(stringToCalendar(it.startDate), getCalendarEventDrawable(it.type)))
         }
         binding.calendarView.setEvents(events)
+    }
+
+    private fun userClassFromCalendar(cal:Calendar): GymClass?{
+        val res = userClasses.find { stringdateRemoveHMS(it.startDate) == calendarToString(cal) }
+        return res
+    }
+
+    private fun unbookCalendarEvent(){
+        val booking = userClassFromCalendar(binding.calendarView.firstSelectedDate)!!
+
+        backend.unbook(BookingBody("$userId"),booking.gymId,booking.id).enqueue(object : Callback<Unit> { //TODO(fran): will we handle multiple userIds?
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                //TODO(fran): update shown calendar events (maybe re-request them from the backend?)
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Toast.makeText(activity, "Couldn't unbook the class!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(BookingsViewModel::class.java)
+
+        setCalendarEvents()
 
         val min_date = Calendar.getInstance()
         min_date.add(Calendar.MONTH, -1)
@@ -133,9 +168,9 @@ class BookingsFragment : Fragment() {
             override fun onDayClick(eventDay: EventDay) {
                 val clickedDayCalendar: Calendar = eventDay.calendar
 
-                val booking = userClasses.find { stringdateRemoveHMS(it.startDate) == calendarToString(clickedDayCalendar) }
-                //TODO?(fran): instead of having to check in this very poor man's way we could subclass EventDay and add the information of the class inside, though that may cause
-                //outdated state issues
+                val booking = userClassFromCalendar(clickedDayCalendar)
+                //TODO?(fran): instead of having to check in this very poor man's way we could subclass EventDay and add the information of the class inside,
+                // though that may cause outdated state issues
 
                 if(booking!=null){
                     val startDate = stringToCalendar(booking.startDate)
@@ -163,11 +198,38 @@ class BookingsFragment : Fragment() {
         //binding.bookBtnReview.setOnClickListener {  } //NOTE(fran): this need not exist, the info on the class description is enough
 
         binding.bookBtnUnbook.setOnClickListener {
-            Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
+            //Log.d("",calendarToString(binding.calendarView.firstSelectedDate))
             //INFO: At this point 'binding.calendarView.firstSelectedDate' always has a valid date that corresponds to the currently selected gym class
-            /*TODO(fran): unbook class*/
+            AlertDialog.Builder(activity)
+                .setTitle("Confirm Unbooking")
+                .setMessage("Are you sure you want to unbook from this class?")
+                .setPositiveButton("Yes") { dialog, id -> unbookCalendarEvent(); dialog.cancel() }
+                .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+                .create()
+                .show()
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        backend.userClasses(userId).enqueue(object : Callback<List<GymClass>> { //TODO(fran): will we handle multiple userIds?
+            override fun onResponse(call: Call<List<GymClass>>, response: Response<List<GymClass>>) {
+
+                val newUserClasses : List<GymClass> = response.body()!!
+
+                if (newUserClasses.isNotEmpty()){
+                    userClasses.clear()
+                    newUserClasses.forEach { userClasses.add(it) }
+                    setCalendarEvents()
+                }
+            }
+
+            override fun onFailure(call: Call<List<GymClass>>, t: Throwable) {
+                Toast.makeText(activity, "No Classes found!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 }

@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/details_content_margin_left"
                 android:layout_marginRight="@dimen/details_content_margin_left"
-                android:layout_marginBottom="@dimen/details_content_margin_left"
                 app:cardCornerRadius="@dimen/details_imglogo_dim_quarter"
                 app:cardElevation="@dimen/details_imglogo_dim_quarter"
                 app:cardUseCompatPadding="false">

@@ -9,21 +9,24 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface APIService {
-    @GET("/gyms")
+    @GET("gyms")
     fun gyms(): Call<List<Gym>>
 
-    @POST("/gyms/search")
+    @POST("gyms/search")
     fun search(@Body gymQuery: GymQuery): Call<List<Gym>>
 
-    @GET("/gyms/{id}/classes")
+    @GET("gyms/{id}/classes")
     fun classes(@Path("id") gymId: Int): Call<List<GymClass>>
 
-    @GET("/gyms/{id}/image")
+    @GET("users/{id}/classes")
+    fun userClasses(@Path("id") userId: Int): Call<List<GymClass>>
+
+    @GET("gyms/{id}/image")
     fun image(@Path("id") gymId: Int): Call<String>
 
-    @POST("/gyms/{id}/classes/{classId}/reserve")
+    @POST("gyms/{id}/classes/{classId}/reserve")
     fun reserve(@Body userId: BookingBody, @Path("id") gymId: Int, @Path("classId") classId: Int): Call<Unit>
 
-    @POST("/gyms/{id}/classes/{classId}/unbook")
+    @POST("gyms/{id}/classes/{classId}/unbook")
     fun unbook(@Body userId: BookingBody, @Path("id") gymId: Int, @Path("classId") classId: Int): Call<Unit>
 }

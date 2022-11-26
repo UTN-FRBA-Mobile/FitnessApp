@@ -18,6 +18,7 @@ class HomeViewModel : ViewModel() {
         // TODO: Request gyms using a string
         val exampleClasses = arrayListOf(
             GymClass(id = 1,
+                     gymId = 1,
                      type = "Clase 1",
                      professor = "Pepe",
                      startDate = "10 JUL 2022 - 10:30 am",
@@ -25,6 +26,7 @@ class HomeViewModel : ViewModel() {
                      people = 10,
                      maxCapacity = 15),
             GymClass(id = 2,
+                     gymId = 2,
                      type = "Clase 2",
                      professor = "Carlos",
                      startDate = "10 JUL 2022 - 10:30 am",
