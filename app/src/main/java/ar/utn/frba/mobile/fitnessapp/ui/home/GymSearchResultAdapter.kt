@@ -2,7 +2,6 @@ package ar.utn.frba.mobile.fitnessapp.ui.home
 
 import android.content.Context
 import android.location.Location
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
