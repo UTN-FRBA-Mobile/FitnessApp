@@ -8,5 +8,5 @@ data class GymQuery(
     @SerializedName("near_point")
     val nearPoint:    Location?,
     @SerializedName("search_radius")
-    val searchRadius: Int
+    val searchRadius: Double
 )

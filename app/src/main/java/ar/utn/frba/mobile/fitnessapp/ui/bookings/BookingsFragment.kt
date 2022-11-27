@@ -19,6 +19,7 @@ import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentBookingsBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import ar.utn.frba.mobile.fitnessapp.model.Schedule
 import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
 import ar.utn.frba.mobile.fitnessapp.model.backend.BookingBody
 import com.applandeo.materialcalendarview.EventDay
@@ -45,16 +46,16 @@ class BookingsFragment : Fragment() {
     //private var selectedGym : Gym? = null
 
     private var _userClasses = listOf(
-        GymClass(id=0,gymId=1,type="CrossFit",startDate="2022-12-03T12:30:00",endDate="2022-12-03T13:30:00",professor="Arnold",people=10,maxCapacity=30),
-        GymClass(id=1,gymId=0,type="Spin",startDate="2022-12-04T15:00:00",endDate="2022-12-03T16:30:00",professor="Jenny",people=15,maxCapacity=35),
-        GymClass(id=2,gymId=3,type="Yoga",startDate="2022-12-05T19:15:00",endDate="2022-12-03T20:15:00",professor="Darrell",people=20,maxCapacity=40),
+        GymClass(id="0",gymId="1",type="CrossFit",schedule=Schedule(startHour=1.0,endHour=1.0,weekDay=1,startDate="2022-12-03T12:30:00",endDate="2022-12-03T13:30:00"),professor="Arnold",people=10,maxCapacity=30,description="Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator"),
+        GymClass(id="1",gymId="0",type="Spin",    schedule=Schedule(startHour=1.0,endHour=1.0,weekDay=1,startDate="2022-12-04T15:00:00",endDate="2022-12-03T16:30:00"),professor="Jenny",people=15,maxCapacity=35,description="Heavy weightlifting Your Mother style before becoming the Mother 3"),
+        GymClass(id="2",gymId="3",type="Yoga",    schedule=Schedule(startHour=1.0,endHour=1.0,weekDay=1,startDate="2022-12-05T19:15:00",endDate="2022-12-03T20:15:00"),professor="Darrell",people=20,maxCapacity=40,description="Heavy weightlifting Kubrick style before becoming the Baby"),
     )
 
     private var userClasses = mutableListOf<GymClass>()
 
     private val backend = BackendService.create()
 
-    private val userId : Int = 1  //TODO(fran): will we handle multiple userIds?
+    private val userId : String = "1"  //TODO(fran): will we handle multiple userIds?
 
     private var gyms: MutableList<Gym>? = null
 
@@ -124,7 +125,7 @@ class BookingsFragment : Fragment() {
         var events = mutableListOf<EventDay>()
 
         classes.forEach {
-            events.add(EventDay(stringToCalendar(it.startDate), getCalendarEventDrawable(it.type)))
+            events.add(EventDay(stringToCalendar(it.schedule.startDate), getCalendarEventDrawable(it.type)))
         }
         //binding.calendarView.clearSelectedDays()
         binding.calendarView.setEvents(events)
@@ -132,7 +133,7 @@ class BookingsFragment : Fragment() {
     }
 
     private fun userClassFromCalendar(cal:Calendar): GymClass?{
-        val res = userClasses.find { stringdateRemoveHMS(it.startDate) == calendarToString(cal) }
+        val res = userClasses.find { stringdateRemoveHMS(it.schedule.startDate) == calendarToString(cal) }
         return res
     }
 
@@ -141,7 +142,7 @@ class BookingsFragment : Fragment() {
 
         uiShowSelectedGymClassInteractions(false)
 
-        backend.unbook(BookingBody("$userId"),booking.gymId,booking.id).enqueue(object : Callback<Unit> { //TODO(fran): will we handle multiple userIds?
+        backend.unbook(BookingBody(userId),booking.gymId,booking.id).enqueue(object : Callback<Unit> { //TODO(fran): will we handle multiple userIds?
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 retrieveAndSetCalendarEvents()
             }
@@ -158,11 +159,7 @@ class BookingsFragment : Fragment() {
 
                 val newUserClasses : List<GymClass> = response.body()!!
 
-                val TEST : Boolean = true //TODO(fran): remove when the backend userClasses contain valid startDate & endDate
-                if(TEST)
-                    setCalendarEvents(_userClasses)
-                else
-                    setCalendarEvents(newUserClasses)
+                setCalendarEvents(newUserClasses)
             }
 
             override fun onFailure(call: Call<List<GymClass>>, t: Throwable) {
@@ -209,8 +206,8 @@ class BookingsFragment : Fragment() {
                 // though that may cause outdated state issues
 
                 if(booking!=null){
-                    val startDate = stringToCalendar(booking.startDate)
-                    val endDate = stringToCalendar(booking.endDate)
+                    val startDate = stringToCalendar(booking.schedule.startDate)
+                    val endDate = stringToCalendar(booking.schedule.endDate)
 
                     val gymName = gyms?.find { it.id==booking.gymId }?.name
                     binding.bookClassTitle.text = booking.type + if(gymName!=null) " - " + gymName else ""
@@ -218,7 +215,7 @@ class BookingsFragment : Fragment() {
                         SimpleDateFormat("EE").format(startDate.time) + " " + startDate.get(Calendar.DAY_OF_MONTH).toString() + " " + SimpleDateFormat("MMM").format(startDate.time) + " " +
                         startDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ startDate.get(Calendar.MINUTE).toString() + " - " +
                         endDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ endDate.get(Calendar.MINUTE).toString()
-                    binding.bookClassDesc.text = shuffleString("Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator") //TODO: retrieve real gym class description
+                    binding.bookClassDesc.text = booking.description
                     uiShowSelectedGymClassInteractions(true)
                 }
                 else{

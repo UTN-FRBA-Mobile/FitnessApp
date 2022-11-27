@@ -46,6 +46,9 @@
         <argument
             android:name="gym"
             app:argType="ar.utn.frba.mobile.fitnessapp.model.Gym" />
+        <action
+            android:id="@+id/action_classesFragment_to_acceptDialogFragment"
+            app:destination="@id/acceptDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_details"
@@ -59,11 +62,19 @@
             android:name="gym"
             app:argType="ar.utn.frba.mobile.fitnessapp.model.Gym" />
     </fragment>
-
     <fragment
         android:id="@+id/navigation_bookings"
         android:name="ar.utn.frba.mobile.fitnessapp.ui.bookings.BookingsFragment"
         android:label="Bookings"
         tools:layout="Bookings"
         />
+    <dialog
+        android:id="@+id/acceptDialogFragment"
+        android:name="ar.utn.frba.mobile.fitnessapp.ui.classes.AcceptDialogFragment"
+        android:label="AcceptDialogFragment" >
+        <argument
+            android:name="gymClass"
+            app:argType="ar.utn.frba.mobile.fitnessapp.model.GymClass" />
+    </dialog>
+
 </navigation>

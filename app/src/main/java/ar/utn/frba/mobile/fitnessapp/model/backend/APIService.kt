@@ -16,17 +16,17 @@ interface APIService {
     fun search(@Body gymQuery: GymQuery): Call<List<Gym>>
 
     @GET("gyms/{id}/classes")
-    fun classes(@Path("id") gymId: Int): Call<List<GymClass>>
+    fun classes(@Path("id") gymId: String): Call<List<GymClass>>
 
     @GET("users/{id}/classes")
-    fun userClasses(@Path("id") userId: Int): Call<List<GymClass>>
+    fun userClasses(@Path("id") userId: String): Call<List<GymClass>>
 
     @GET("gyms/{id}/image")
-    fun image(@Path("id") gymId: Int): Call<String>
+    fun image(@Path("id") gymId: String): Call<String>
 
     @POST("gyms/{id}/classes/{classId}/reserve")
-    fun reserve(@Body userId: BookingBody, @Path("id") gymId: Int, @Path("classId") classId: Int): Call<Unit>
+    fun reserve(@Body userId: BookingBody, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
 
     @POST("gyms/{id}/classes/{classId}/unbook")
-    fun unbook(@Body userId: BookingBody, @Path("id") gymId: Int, @Path("classId") classId: Int): Call<Unit>
+    fun unbook(@Body userId: BookingBody, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
 }
