@@ -1,16 +1,13 @@
 package ar.utn.frba.mobile.fitnessapp.ui.settings
 
-import android.media.MediaPlayer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.constraintlayout.widget.ConstraintLayout
-import ar.utn.frba.mobile.fitnessapp.MainActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentSettingsBinding
@@ -46,12 +43,19 @@ class SettingsFragment : Fragment() {
         return root
     }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.spinner.setOnSpinnerItemSelected(){
-            closeCamera()
-            MediaPlayer.create(activity, R.raw.camera4).start()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val cameraID: Int = Integer.parseInt(binding.spinner.getSelectedItem().toString())
+                MyPreferences.setCameraIDPreference(context!!, cameraID)
+            }
+
         }
-    }*/
+    }
 
     override fun onStart() {
         super.onStart()
@@ -64,14 +68,14 @@ class SettingsFragment : Fragment() {
         if(showBG){
             settingsScreen?.setBackgroundResource(R.drawable.bg_beachx);
         }
-/*
-        val chkCamInfo  = activity?.findViewById<CheckBox>(R.id.camera_info)
+
+        val chkCamInfo  = activity?.findViewById<CheckBox>(R.id.cam_stats)
         showCamInfo = MyPreferences.isCamInfoEnabled(context!!)
         chkCamInfo?.setChecked(showCamInfo)
 
         cameraProvider = ProcessCameraProvider.getInstance(requireContext()).get()
+        cameraID = MyPreferences.getCameraID(context!!)
         setDropdown()
-        */
 
     }
 
@@ -82,6 +86,8 @@ class SettingsFragment : Fragment() {
         val items = Array(size){"$it"}
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_dropdown_item, items)
         dropdown?.adapter = adapter
+
+        dropdown?.setSelection(cameraID)
     }
 
     override fun onDestroyView() {

@@ -43,15 +43,25 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/previewView"
             android:background="@color/white"
+            android:textColor="#000000"
             android:paddingStart="20dp"
-            android:text="Camera stats: "
-            android:visibility="visible" />
+            android:text="Start scanning to see camera stats..."
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/guyPNG"
             android:layout_width="@dimen/image_size"
             android:layout_height="@dimen/image_size"
             android:src="@drawable/guy"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/messi"
+            android:layout_width="@dimen/messi_width"
+            android:layout_height="@dimen/messi_height"
+            app:layout_constraintBottom_toBottomOf="@+id/previewView"
+            app:layout_constraintRight_toRightOf="@+id/previewView"
+            android:src="@drawable/messiqr"
             android:visibility="invisible"/>
 
 
