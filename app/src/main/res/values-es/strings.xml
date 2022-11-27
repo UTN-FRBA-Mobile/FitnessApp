@@ -18,6 +18,8 @@
     <string name="lang">Idioma: 🇪🇸</string>
     <string name="check_bg">Habilitar fondos random</string>
     <string name="adorno">Botón de adorno</string>
+    <string name="cam_stats">Mostrar info de cámara en QR</string>
+    <string name="cam_select">Cámara a usar en QR</string>
 
     <string name="hola">hola</string>
     <string name="chau">chau</string>
