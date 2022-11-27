@@ -39,7 +39,6 @@ class AcceptDialogFragment : DialogFragment() {
                     R.string.accept_gym
                 ) { dialog, id ->
                     // START THE GAME!
-                    backend
                     println("UserID: 1, gymID: " + args.gymClass.gymId + "classId: " + args.gymClass.id)
                     backend.reserve(BookingBody("1"), args.gymClass.gymId, args.gymClass.id).call(
                         onResponse = { _, response ->
