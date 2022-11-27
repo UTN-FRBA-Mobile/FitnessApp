@@ -20,7 +20,13 @@ class AcceptDialogFragment : DialogFragment() {
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
-            builder.setMessage(R.string.dialog_start_game)
+            args.gymClass.schedule.startDate //TODO mejorar la fecha para que te lo muestre mas lindo
+            builder.setMessage(
+                getString(R.string.dialog_start_game).replace(
+                    "%s1",
+                    args.gymClass.type
+                ).replace("%s2", args.gymClass.schedule.startDate)
+            )
                 .setPositiveButton(
                     R.string.accept_gym
                 ) { dialog, id ->

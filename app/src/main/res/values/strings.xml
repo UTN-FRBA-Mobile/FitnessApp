@@ -39,7 +39,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="dialog_start_game">"Book class"</string>
+    <string name="dialog_start_game">"Are you sure you want to book class: %s1 on %s2 ?"</string>
     <string name="accept_gym">"Book"</string>
     <string name="class_successfully_booked">"Class successfully booked"</string>
     <string name="class_book_error">"Couldn't book class, please try again"</string>
