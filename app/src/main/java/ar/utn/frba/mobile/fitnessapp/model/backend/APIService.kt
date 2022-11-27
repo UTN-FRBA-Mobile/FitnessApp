@@ -22,8 +22,8 @@ interface APIService {
     fun image(@Path("id") gymId: String): Call<String>
 
     @POST("gyms/{id}/classes/{classId}/reserve")
-    fun reserve(@Body userId: String, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
+    fun reserve(@Body userId: BookingBody, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
 
     @POST("gyms/{id}/classes/{classId}/unbook")
-    fun unbook(@Body userId: String, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
+    fun unbook(@Body userId: BookingBody, @Path("id") gymId: String, @Path("classId") classId: String): Call<Unit>
 }
