@@ -1,6 +1,7 @@
 package ar.utn.frba.mobile.fitnessapp.ui.qr
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaPlayer
@@ -32,6 +33,8 @@ import ar.utn.frba.mobile.fitnessapp.databinding.FragmentQrBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
 import ar.utn.frba.mobile.fitnessapp.model.Location
+import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
+import ar.utn.frba.mobile.fitnessapp.model.backend.call
 import ar.utn.frba.mobile.fitnessapp.ui.home.HomeFragmentDirections
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.Barcode
@@ -69,6 +72,7 @@ class QRFragment : Fragment() {
     var mediaPlayer: MediaPlayer? = null
 
     private lateinit var navController: NavController
+    private val backend: BackendService = BackendService.create()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -376,19 +380,31 @@ class QRFragment : Fragment() {
 
                     val valueType = barcode.valueType
 
-                    Toast.makeText(getActivity(), "✨✨✨✨✨✨✨", Toast.LENGTH_SHORT).show()
 
                     //abrir gym
                     //todo verificar si existe o no el gym
-                    val gym = Gym(42, "avatar?", barcode.rawValue, Location(42.0, 15.0), arrayListOf())
-                    val action = QRFragmentDirections.actionNavigationQrToDetailsFragment(gym)
 
-                    closeCamera()
-                    val scanButton = activity?.findViewById<Button>(R.id.buttonScan)
-                    scanButton?.setEnabled(false)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navController.navigate(action)
-                    }, 1_500)
+
+                    backend.gyms().call(
+                        onResponse = { _, response ->
+                            val gyms = response.body()!!
+                            val foundGym = gyms.find {it.id == barcode.rawValue}!!
+
+                            val action = QRFragmentDirections.actionNavigationQrToDetailsFragment(foundGym)
+
+                            closeCamera()
+                            val scanButton = activity?.findViewById<Button>(R.id.buttonScan)
+                            scanButton?.setEnabled(false)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                navController.navigate(action)
+                            }, 1_500)
+
+                        },
+                        onFailure = { _, response ->
+                            Toast.makeText(getActivity(), R.string.class_book_error, Toast.LENGTH_SHORT).show()
+                        })
+
+
 
                 }
             }
@@ -410,7 +426,6 @@ class QRFragment : Fragment() {
                 }*/
             }
     }
-
 
 
 

@@ -28,7 +28,7 @@
         tools:layout="@layout/fragment_qr">
         <action
         android:id="@+id/action_navigation_qr_to_detailsFragment"
-        app:destination="@id/detailsFragment" />
+        app:destination="@id/navigation_details" />
     </fragment>
 
     <fragment
