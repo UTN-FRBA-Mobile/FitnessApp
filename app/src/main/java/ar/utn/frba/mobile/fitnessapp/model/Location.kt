@@ -19,10 +19,8 @@ data class Location (
 ) : Parcelable, Locatable() {
     override fun androidLocation(): android.location.Location {
         val location = android.location.Location("")
-        location.apply {
-            latitude = this.latitude
-            longitude = this.longitude
-        }
+        location.longitude = longitude
+        location.latitude = latitude
         return location
     }
 }
@@ -32,4 +30,8 @@ fun android.location.Location.asLocatable(): Locatable {
     return object:Locatable() {
         override fun androidLocation(): Location = this@asLocatable
     }
+}
+
+fun android.location.Location.toLocation(): ar.utn.frba.mobile.fitnessapp.model.Location {
+    return Location(latitude=this.latitude, longitude=this.longitude)
 }

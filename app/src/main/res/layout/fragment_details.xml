@@ -72,7 +72,7 @@
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"
                                 android:text="[Contact Info]"
-                                android:textColor="@color/material_dynamic_neutral10" />
+                                android:textColor="@color/black" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -113,7 +113,7 @@
                                 android:backgroundTint="#FF8787"
                                 android:paddingTop="15dp"
                                 android:paddingBottom="15dp"
-                                android:text="Book"
+                                android:text="View Classes"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 app:cornerRadius="300dp" />
@@ -141,6 +141,7 @@
                         android:id="@+id/det_gym_logo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
                         tools:src="@drawable/guy" />
                 </androidx.cardview.widget.CardView>
 

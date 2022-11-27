@@ -2,6 +2,7 @@ package ar.utn.frba.mobile.fitnessapp.ui.classes
 
 import android.content.Context
 import android.content.res.Resources.Theme
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import java.time.LocalDate
 
 class GymClassAdapter(private val currContext: Context, private val arrayList: ArrayList<GymClass>)
     : ArrayAdapter<GymClass>(currContext, R.layout.class_info_item, arrayList) {
@@ -33,8 +35,8 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
 
         gymClassType.text = gymClass.type
         gymClassProfessor.text = gymClass.professor
-        gymClassStartDate.text = gymClass.startDate
-        gymClassEndDate.text = gymClass.endDate
+        gymClassStartDate.text = "FECHA DE INICIO"  // TODO ¿Que hacemos con los schedules?
+        gymClassEndDate.text = "FECHA DE FIN"
         val peopleStatus = "${gymClass.people} / ${gymClass.maxCapacity}"
         gymClassPeopleStatus.text = peopleStatus
 
@@ -44,14 +46,12 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
             val notAvailableColorSecondary =
                 currContext.resources.getColor(R.color.classUnavailableSecondary, currContext.theme)
 
-            val cornerRadius =
-                currContext.resources.getDimension(R.dimen.cardCornerRadius)
-
             classCard.setBackgroundColor(notAvailableColorSecondary)
-            classCard.radius = cornerRadius
-
             cardInfo.setBackgroundColor(notAvailableColorPrimary)
         }
+
+        val cornerRadius = currContext.resources.getDimension(R.dimen.cardCornerRadius)
+        classCard.radius = cornerRadius
 
         return view
     }
