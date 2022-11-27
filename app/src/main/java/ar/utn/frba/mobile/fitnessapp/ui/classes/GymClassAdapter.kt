@@ -11,9 +11,12 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.GymClass
 import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GymClassAdapter(private val currContext: Context, private val arrayList: ArrayList<GymClass>)
     : ArrayAdapter<GymClass>(currContext, R.layout.class_info_item, arrayList) {
@@ -27,16 +30,30 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
 
         val gymClassType: TextView = view.findViewById(R.id.classType)
         val gymClassProfessor: TextView = view.findViewById(R.id.professor)
-        val gymClassStartDate: TextView = view.findViewById(R.id.startDate)
-        val gymClassEndDate: TextView = view.findViewById(R.id.endDate)
+        val gymClassStartDate: TextView = view.findViewById(R.id.date)
+        val gymClassEndDate: TextView = view.findViewById(R.id.time)
         val gymClassPeopleStatus: TextView = view.findViewById(R.id.peopleStatus)
 
         val gymClass = arrayList[position]
 
         gymClassType.text = gymClass.type
         gymClassProfessor.text = gymClass.professor
-        gymClassStartDate.text = "FECHA DE INICIO"  // TODO ¿Que hacemos con los schedules?
-        gymClassEndDate.text = "FECHA DE FIN"
+
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val startTime = formatter.parse(gymClass.schedule.startDate)
+        val endTime = formatter.parse(gymClass.schedule.endDate)
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        gymClassStartDate.text = dateFormat.format(startTime)
+
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val scheduleFormat = context.resources.getString(R.string.schedule)
+        val schedule = scheduleFormat
+            .replaceFirst("%s", timeFormat.format(startTime))
+            .replaceFirst("%s", timeFormat.format(endTime))
+
+        gymClassEndDate.text = schedule
+
         val peopleStatus = "${gymClass.people} / ${gymClass.maxCapacity}"
         gymClassPeopleStatus.text = peopleStatus
 

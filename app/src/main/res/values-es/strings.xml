@@ -39,4 +39,6 @@
     <string name="gymDistancePlaceholder">Distancia:</string>
     <string name="meterUnitDescription">metros</string>
     <string name="kilometerUnitDescription">km</string>
+
+    <string name="schedule">De %s a %s</string>
 </resources>

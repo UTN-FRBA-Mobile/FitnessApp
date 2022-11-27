@@ -11,6 +11,8 @@ import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
 import ar.utn.frba.mobile.fitnessapp.model.backend.BookingBody
 import ar.utn.frba.mobile.fitnessapp.model.backend.call
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AcceptDialogFragment : DialogFragment() {
     private val args: AcceptDialogFragmentArgs by navArgs()
@@ -20,12 +22,23 @@ class AcceptDialogFragment : DialogFragment() {
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
-            builder.setMessage(R.string.dialog_start_game)
+            val cal: Calendar = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH)
+            cal.setTime(sdf.parse(args.gymClass.schedule.startDate)) // all done
+            val month =
+                cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+            val day =
+                cal.get(Calendar.DAY_OF_MONTH).toString()
+            builder.setMessage(
+                getString(R.string.dialog_start_game).replace(
+                    "%s1",
+                    args.gymClass.type
+                ).replace("%s2", "$month $day th")
+            )
                 .setPositiveButton(
                     R.string.accept_gym
                 ) { dialog, id ->
                     // START THE GAME!
-                    backend
                     println("UserID: 1, gymID: " + args.gymClass.gymId + "classId: " + args.gymClass.id)
                     backend.reserve(BookingBody("1"), args.gymClass.gymId, args.gymClass.id).call(
                         onResponse = { _, response ->
@@ -37,7 +50,7 @@ class AcceptDialogFragment : DialogFragment() {
                             ).show()
                             dialog.dismiss()
                         },
-                        onFailure = { _, response ->
+                        onFailure = { _, _ ->
                             Toast.makeText(
                                 (dialog as AlertDialog).context,
                                 R.string.class_book_error,

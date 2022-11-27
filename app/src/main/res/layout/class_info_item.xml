@@ -58,24 +58,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/professor">
 
                 <TextView
-                    android:id="@+id/startDate"
+                    android:id="@+id/date"
                     android:paddingHorizontal="5dp"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@color/black"
-                    tools:text="Fecha Inicio" />
+                    tools:text="Fecha" />
 
                 <TextView
-                    android:id="@+id/endDate"
+                    android:id="@+id/time"
                     android:paddingHorizontal="5dp"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:textColor="@color/black"
-                    tools:text="Fecha Fin" />
+                    tools:text="hh:mm - hh:mm" />
 
             </LinearLayout>
 
