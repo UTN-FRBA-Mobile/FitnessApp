@@ -44,17 +44,20 @@ class BookingsFragment : Fragment() {
     //private var selectedDate : Calendar? = null
     //private var selectedGym : Gym? = null
 
-    private var userClasses = mutableListOf(
+    private var _userClasses = listOf(
         GymClass(id=0,gymId=1,type="CrossFit",startDate="2022-12-03T12:30:00",endDate="2022-12-03T13:30:00",professor="Arnold",people=10,maxCapacity=30),
         GymClass(id=1,gymId=0,type="Spin",startDate="2022-12-04T15:00:00",endDate="2022-12-03T16:30:00",professor="Jenny",people=15,maxCapacity=35),
         GymClass(id=2,gymId=3,type="Yoga",startDate="2022-12-05T19:15:00",endDate="2022-12-03T20:15:00",professor="Darrell",people=20,maxCapacity=40),
     )
 
+    private var userClasses = mutableListOf<GymClass>()
+
     private val backend = BackendService.create()
 
-    private val userId : Int = 1
+    private val userId : Int = 1  //TODO(fran): will we handle multiple userIds?
 
     private var gyms: MutableList<Gym>? = null
+
 
     private fun getDrawableText(text: String, color: Int, size: Int): Drawable {
         val bitmap = Bitmap.createBitmap(105, 48, Bitmap.Config.ARGB_8888) //TODO(fran): find out a way to retrieve the width and height of the cell
@@ -101,11 +104,6 @@ class BookingsFragment : Fragment() {
         return res
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        _binding = FragmentBookingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     private fun shuffleString(string: String): String {
         val shuffled = string.split(' ').toMutableList()
         shuffled.shuffle()
@@ -116,19 +114,21 @@ class BookingsFragment : Fragment() {
         return res
     }
 
-    private fun uiClearSelectedGymClass(){
-        binding.bookBtnReview.isEnabled = false //TODO(fran): better looking disabled buttons
-        binding.bookBtnUnbook.isEnabled = false
-        binding.gymInfoCard.visibility = View.GONE
+    private fun uiShowSelectedGymClassInteractions(show : Boolean){
+        binding.bookBtnReview.isEnabled = show //TODO(fran): better looking disabled buttons
+        binding.bookBtnUnbook.isEnabled = show
+        binding.gymInfoCard.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun setCalendarEvents(){
+    private fun setCalendarEvents(classes : List<GymClass>){
         var events = mutableListOf<EventDay>()
 
-        userClasses.forEach {
+        classes.forEach {
             events.add(EventDay(stringToCalendar(it.startDate), getCalendarEventDrawable(it.type)))
         }
+        //binding.calendarView.clearSelectedDays()
         binding.calendarView.setEvents(events)
+        userClasses = classes.toMutableList()
     }
 
     private fun userClassFromCalendar(cal:Calendar): GymClass?{
@@ -139,15 +139,42 @@ class BookingsFragment : Fragment() {
     private fun unbookCalendarEvent(){
         val booking = userClassFromCalendar(binding.calendarView.firstSelectedDate)!!
 
+        uiShowSelectedGymClassInteractions(false)
+
         backend.unbook(BookingBody("$userId"),booking.gymId,booking.id).enqueue(object : Callback<Unit> { //TODO(fran): will we handle multiple userIds?
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                //TODO(fran): update shown calendar events (maybe re-request them from the backend?)
+                retrieveAndSetCalendarEvents()
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 Toast.makeText(activity, "Couldn't unbook the class!", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun retrieveAndSetCalendarEvents(){
+        backend.userClasses(userId).enqueue(object : Callback<List<GymClass>> {
+            override fun onResponse(call: Call<List<GymClass>>, response: Response<List<GymClass>>) {
+
+                val newUserClasses : List<GymClass> = response.body()!!
+
+                val TEST : Boolean = true //TODO(fran): remove when the backend userClasses contain valid startDate & endDate
+                if(TEST)
+                    setCalendarEvents(_userClasses)
+                else
+                    setCalendarEvents(newUserClasses)
+            }
+
+            override fun onFailure(call: Call<List<GymClass>>, t: Throwable) {
+                Toast.makeText(activity, "No Classes found!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+        _binding = FragmentBookingsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -159,7 +186,7 @@ class BookingsFragment : Fragment() {
             override fun onFailure(call: Call<List<Gym>>, t: Throwable) { Toast.makeText(activity, "No Gyms found!", Toast.LENGTH_SHORT).show() }
         })
 
-        setCalendarEvents()
+        retrieveAndSetCalendarEvents()
 
         val min_date = Calendar.getInstance()
         min_date.add(Calendar.MONTH, -1)
@@ -170,6 +197,8 @@ class BookingsFragment : Fragment() {
         binding.calendarView.setMinimumDate(min_date)
         binding.calendarView.setMaximumDate(max_date)
         binding.calendarView.clearSelectedDays()
+
+        uiShowSelectedGymClassInteractions(false)
 
         binding.calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -190,18 +219,13 @@ class BookingsFragment : Fragment() {
                         startDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ startDate.get(Calendar.MINUTE).toString() + " - " +
                         endDate.get(Calendar.HOUR_OF_DAY).toString() +":"+ endDate.get(Calendar.MINUTE).toString()
                     binding.bookClassDesc.text = shuffleString("Heavy weightlifting Arnold Schwarzenegger style before becoming the Terminator") //TODO: retrieve real gym class description
-                    binding.bookBtnReview.isEnabled = true
-                    binding.bookBtnUnbook.isEnabled = true
-                    binding.gymInfoCard.visibility = View.VISIBLE
-
+                    uiShowSelectedGymClassInteractions(true)
                 }
                 else{
-                    uiClearSelectedGymClass()
+                    uiShowSelectedGymClassInteractions(false)
                 }
             }
         })
-
-        uiClearSelectedGymClass()
 
         //binding.bookBtnReview.setOnClickListener {  } //NOTE(fran): this need not exist, the info on the class description is enough
 
@@ -222,22 +246,7 @@ class BookingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        backend.userClasses(userId).enqueue(object : Callback<List<GymClass>> { //TODO(fran): will we handle multiple userIds?
-            override fun onResponse(call: Call<List<GymClass>>, response: Response<List<GymClass>>) {
-
-                val newUserClasses : List<GymClass> = response.body()!!
-
-                if (newUserClasses.isNotEmpty()){
-                    userClasses.clear()
-                    newUserClasses.forEach { userClasses.add(it) }
-                    setCalendarEvents()
-                }
-            }
-
-            override fun onFailure(call: Call<List<GymClass>>, t: Throwable) {
-                Toast.makeText(activity, "No Classes found!", Toast.LENGTH_SHORT).show()
-            }
-        })
+        retrieveAndSetCalendarEvents()
     }
 
 }
