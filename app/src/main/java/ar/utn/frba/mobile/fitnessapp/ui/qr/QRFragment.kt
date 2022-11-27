@@ -52,6 +52,8 @@ class QRFragment : Fragment() {
 
     private var _binding: FragmentQrBinding? = null
     private var showBG: Boolean = true
+    private var showCamInfo: Boolean = false
+    private var cameraID: Int = 0
     private var cameraPermission: Boolean = false
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView: PreviewView
@@ -96,9 +98,11 @@ class QRFragment : Fragment() {
                 launchCamera()
             }
         }
-        binding.buttonClose.setOnClickListener{
+        binding.previewView.setOnClickListener{
             closeCamera()
+            MediaPlayer.create(activity, R.raw.camera4).start()
         }
+
 
         mediaPlayer = MediaPlayer.create(activity, R.raw.s1600)
 
@@ -107,18 +111,24 @@ class QRFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         val qrView = activity?.findViewById<ScrollView>(R.id.qrScreen)
+        val cameraInfoBox = activity?.findViewById<TextView>(R.id.camera_info)
 
         showBG = MyPreferences.isShowBGsPreferredView(context!!)
         if(showBG){
             qrView?.setBackgroundResource(R.drawable.bg_gymx);
         }
 
+        showCamInfo = MyPreferences.isCamInfoEnabled(context!!)
+        if(showCamInfo){
+            cameraInfoBox?.setVisibility(View.VISIBLE)
+        }
+
+        cameraID = MyPreferences.getCameraID(context!!)
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProvider = cameraProviderFuture.get()
 
         updatePermissionDisplay()
-        setDropdown()
-
 
     }
 
@@ -151,14 +161,6 @@ class QRFragment : Fragment() {
 
     }
 
-    private fun setDropdown() {
-        val size: Int = cameraProvider!!.availableCameraInfos.size
-
-        val dropdown: Spinner? = activity?.findViewById(R.id.spinner)
-        val items = Array(size){"$it"}
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_dropdown_item, items)
-        dropdown?.adapter = adapter
-    }
 
     private fun updatePermissionDisplay(){
         val textPermissionStatus = activity?.findViewById<TextView>(R.id.resultBox)
@@ -166,10 +168,11 @@ class QRFragment : Fragment() {
         cameraPermission = Permissions.hasPermissions(context!!, Manifest.permission.CAMERA)
         if(cameraPermission){
             textPermissionStatus?.setText("Camera permission: Positivo")
-            textPermissionStatus?.setBackgroundColor(Color.GREEN)
+            textPermissionStatus?.setBackgroundColor(Color.parseColor("#cc33ad33"))
         } else{
             textPermissionStatus?.setText("Camera permission: Negativo")
-            textPermissionStatus?.setBackgroundColor(Color.RED)
+            textPermissionStatus?.setBackgroundColor(Color.parseColor("#ccdd6666"))
+            textPermissionStatus?.setVisibility(View.VISIBLE)
         }
     }
 
@@ -199,8 +202,6 @@ class QRFragment : Fragment() {
     }
 
     private fun launchCamera() {
-        val mySpinner = activity?.findViewById<Spinner>(R.id.spinner)
-        val cameraID: Int = Integer.parseInt(mySpinner?.getSelectedItem().toString())
 
         closeCamera()
 
@@ -261,11 +262,11 @@ class QRFragment : Fragment() {
         val r = previewView.display.rotation    //0, 1, 2
         //Toast.makeText(getActivity(), r.toString(), Toast.LENGTH_SHORT).show()
         if(r == 0){
-            w = 480
+            w = 360
             h = 640
         }else{
             w = 640
-            h = 480
+            h = 360
         }
 
         val analysisUseCase = ImageAnalysis.Builder().setTargetRotation(r)
@@ -335,9 +336,9 @@ class QRFragment : Fragment() {
             previewRatio = (previewView.width.toFloat()/newHeight.toFloat())
         }
 
-        imageProxySize = "camera: " + width.toString() + "x" + height.toString() + " " + (imageRatio*100).toInt().toString()+ ". "
-        previewViewSize = "preview: " + previewView.width.toString() + "x" + newHeight.toString() + " " + (previewRatio*100).toInt().toString() + ". "
-        val rot = "$rotation "
+        val rot = "rot degrees: $rotation \n"
+        imageProxySize = "camera: " + width.toString() + "x" + height.toString() + " " + (imageRatio*100).toInt().toString()+ "   \n"
+        previewViewSize = "preview: " + previewView.width.toString() + "x" + newHeight.toString() + " " + (previewRatio*100).toInt().toString()+ "   "
 
         cameraInfoBox?.setText(rot + imageProxySize + previewViewSize)  //crashea si es muy largo el string ????
 
@@ -361,7 +362,7 @@ class QRFragment : Fragment() {
                     //tvScannedData.text = barcode.rawValue
                     resultBox?.setText("QR result: " + barcode.rawValue)
                     resultBox?.setBackgroundColor(Color.BLACK)
-
+                    resultBox?.setVisibility(View.VISIBLE)
 
                     val centerX = (corners[0].x.toFloat() + corners[1].x.toFloat())/2 * relation
                     val centerY = (corners[0].y.toFloat() + corners[2].y.toFloat())/2 * relation
@@ -387,7 +388,7 @@ class QRFragment : Fragment() {
                     scanButton?.setEnabled(false)
                     Handler(Looper.getMainLooper()).postDelayed({
                         navController.navigate(action)
-                    }, 3_000)
+                    }, 1_500)
 
                 }
             }
@@ -398,7 +399,7 @@ class QRFragment : Fragment() {
                 //Once the image being analyzed
                 //closed it by calling ImageProxy.close()
                 thread {
-                    Thread.sleep(3_000) //wait 3 seconds to scan next image
+                    Thread.sleep(2_000) //wait 3 seconds to scan next image
                     guyPNG?.setVisibility(View.INVISIBLE)
                     imageProxy.close()
                 }

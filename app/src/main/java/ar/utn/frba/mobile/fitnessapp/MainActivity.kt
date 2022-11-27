@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
                         settingsScreen?.setBackgroundResource(0);
                     }
                 }
+                R.id.cam_stats -> {
+                        MyPreferences.setShowCamInfoPreference(this, checked)
+                }
                 R.id.adorno -> {
                     if (checked) {
                         Toast.makeText(this, getString(R.string.hola), Toast.LENGTH_SHORT).show()

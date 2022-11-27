@@ -19,6 +19,8 @@
     <string name="lang">Language: 🇺🇸</string>
     <string name="check_bg">Enable random backgrounds</string>
     <string name="adorno">Test checkbox</string>
+    <string name="cam_stats">Show camera info in QR</string>
+    <string name="cam_select">Camera used for QR: </string>
 
     <string name="hola">Hi</string>
     <string name="chau">Bye</string>
