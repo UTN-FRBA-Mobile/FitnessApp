@@ -186,7 +186,7 @@ class BookingsFragment : Fragment() {
             override fun onFailure(call: Call<List<Gym>>, t: Throwable) { Toast.makeText(activity, "No Gyms found!", Toast.LENGTH_SHORT).show() }
         })
 
-        retrieveAndSetCalendarEvents()
+        retrieveAndSetCalendarEvents() //TODO(fran): does this need to be performed here and in onStart?
 
         val min_date = Calendar.getInstance()
         min_date.add(Calendar.MONTH, -1)
