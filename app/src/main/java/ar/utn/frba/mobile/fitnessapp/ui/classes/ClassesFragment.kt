@@ -51,6 +51,7 @@ class ClassesFragment : Fragment() {
                 classList.setOnItemClickListener { parent, _, position, _ ->
                     val gymClass = parent.getItemAtPosition(position)
                     println("Click: $gymClass")  // TODO: Open modal.
+                    AcceptDialogFragment()
                 }
             },
 
