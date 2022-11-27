@@ -50,7 +50,7 @@ class AcceptDialogFragment : DialogFragment() {
                             ).show()
                             dialog.dismiss()
                         },
-                        onFailure = { _, response ->
+                        onFailure = { _, _ ->
                             Toast.makeText(
                                 (dialog as AlertDialog).context,
                                 R.string.class_book_error,
