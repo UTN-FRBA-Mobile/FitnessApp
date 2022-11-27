@@ -1,6 +1,5 @@
 package ar.utn.frba.mobile.fitnessapp.model.backend
 
-import android.text.method.BaseKeyListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,8 +22,8 @@ class BackendService private constructor(private val service: APIService) : APIS
     }
 }
 
-fun <T> Call<T>.call(onResponse: (Call<T>, Response<T>) -> Unit,
-                     onFailure: (Call<T>, t: Throwable) -> Unit) {
+fun <T> Call<T>.call(onResponse: (Call<T>, Response<T>) -> Unit = {_, _ ->},
+                     onFailure: (Call<T>, t: Throwable) -> Unit = {_, _ ->}) {
     enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             onResponse(call, response)

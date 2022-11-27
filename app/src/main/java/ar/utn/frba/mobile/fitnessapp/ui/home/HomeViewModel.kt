@@ -21,8 +21,9 @@ class HomeViewModel : ViewModel() {
     private val backend: BackendService = BackendService.create()
 
     fun search(query: String = "", location: Location? = null, onFailure: (Call<List<Gym>>, t: Throwable) -> Unit) {
-        val searchQuery = GymQuery(name = query,
-                                   nearPoint = location)
+        val searchQuery = GymQuery(name         = query,
+                                   nearPoint    = location,
+                                   searchRadius = 100_000_000.0)   // Por defecto uso 100_000 km
 
         backend.search(searchQuery).enqueue(gymsRequestCallback(location, onFailure))
     }
