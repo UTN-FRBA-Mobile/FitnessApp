@@ -11,6 +11,7 @@ FitnessApp es una app pensada para pequeños gimnasios y profesores que dan clas
 - Escanear un QR para ver los detalles del gimnasio
 
 La app se comunica con el servicio : [Fitness App Api](https://utn-fitness-api.fly.dev/docs)
+El codigo del servicio de backend se encuentra en este [repositorio](https://github.com/tp-mobile-fitness-app/fitness-app-api/tree/develop)
 
 ## Integrantes
 
