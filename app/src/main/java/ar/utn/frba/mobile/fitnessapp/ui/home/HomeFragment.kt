@@ -4,11 +4,13 @@ import android.Manifest
 import android.app.Activity
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +21,7 @@ import ar.utn.frba.mobile.fitnessapp.Permissions
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentHomeBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
+import ar.utn.frba.mobile.fitnessapp.model.toLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -38,7 +41,6 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         navController = findNavController()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
-        viewModel.search()
     }
 
     override fun onCreateView(
@@ -98,7 +100,7 @@ class HomeFragment : Fragment() {
         searchButton.setOnClickListener {
             hideKeyBoard(it)
             val query: String = searchbar.text.toString()
-            viewModel.search(query, location)
+            search(query, location)
         }
 
         viewModel.searchResults.observe(viewLifecycleOwner) { arrayList ->
@@ -112,6 +114,8 @@ class HomeFragment : Fragment() {
                 navController.navigate(action)
             }
         }
+
+        search(location = location)
     }
 
     private fun hideKeyBoard(view: View) {
@@ -126,5 +130,12 @@ class HomeFragment : Fragment() {
             100,
             "Fitness App necesita poder acceder a tu ubicacion para poder arrojarte mejores resultados de búsqueda."
         )
+    }
+
+    private fun search(query: String = "", location: Location? = null) {
+        viewModel.search(query, location?.toLocation()) { _, t ->
+            Toast.makeText(requireContext(), "An error ocurred when attempting to comunicate with the server", Toast.LENGTH_LONG).show()
+            Log.println(Log.WARN, "[HOME_FRAGMENT][SEARCH]", t.toString())
+        }
     }
 }
