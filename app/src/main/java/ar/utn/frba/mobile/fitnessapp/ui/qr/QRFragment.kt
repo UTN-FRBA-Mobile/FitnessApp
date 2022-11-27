@@ -106,6 +106,9 @@ class QRFragment : Fragment() {
             closeCamera()
             MediaPlayer.create(activity, R.raw.camera4).start()
         }
+        binding.messi.setOnClickListener{
+            binding.messi.setVisibility(View.INVISIBLE)
+        }
 
 
         mediaPlayer = MediaPlayer.create(activity, R.raw.s1600)
@@ -221,6 +224,8 @@ class QRFragment : Fragment() {
                 bindPreviewUseCase()
                 bindAnalyseUseCase()
             }
+
+            binding.messi.setVisibility(View.VISIBLE)
     }
 
     private fun closeCamera() {
@@ -266,11 +271,11 @@ class QRFragment : Fragment() {
         val r = previewView.display.rotation    //0, 1, 2
         //Toast.makeText(getActivity(), r.toString(), Toast.LENGTH_SHORT).show()
         if(r == 0){
-            w = 360
+            w = 480
             h = 640
         }else{
             w = 640
-            h = 360
+            h = 480
         }
 
         val analysisUseCase = ImageAnalysis.Builder().setTargetRotation(r)
@@ -344,7 +349,7 @@ class QRFragment : Fragment() {
         imageProxySize = "camera: " + width.toString() + "x" + height.toString() + " " + (imageRatio*100).toInt().toString()+ "   \n"
         previewViewSize = "preview: " + previewView.width.toString() + "x" + newHeight.toString() + " " + (previewRatio*100).toInt().toString()+ "   "
 
-        cameraInfoBox?.setText(rot + imageProxySize + previewViewSize)  //crashea si es muy largo el string ????
+        cameraInfoBox?.setText(rot + imageProxySize + previewViewSize)
 
     }
 
@@ -380,11 +385,7 @@ class QRFragment : Fragment() {
 
                     val valueType = barcode.valueType
 
-
                     //abrir gym
-                    //todo verificar si existe o no el gym
-
-
                     backend.gyms().call(
                         onResponse = { _, response ->
                             val gyms = response.body()!!
@@ -403,7 +404,6 @@ class QRFragment : Fragment() {
                         onFailure = { _, response ->
                             Toast.makeText(getActivity(), R.string.class_book_error, Toast.LENGTH_SHORT).show()
                         })
-
 
 
                 }

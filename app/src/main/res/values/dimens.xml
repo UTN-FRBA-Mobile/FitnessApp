@@ -4,6 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="image_size">80dp</dimen>
+    <dimen name="messi_width">250dp</dimen>
+    <dimen name="messi_height">225dp</dimen>
     <dimen name="cardCornerRadius">15dp</dimen>
 
     <dimen name="details_img_height">300dp</dimen>
