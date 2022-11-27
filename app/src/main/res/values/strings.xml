@@ -19,6 +19,8 @@
     <string name="lang">Language: 🇺🇸</string>
     <string name="check_bg">Enable random backgrounds</string>
     <string name="adorno">Test checkbox</string>
+    <string name="cam_stats">Show camera info in QR</string>
+    <string name="cam_select">Camera used for QR: </string>
 
     <string name="hola">Hi</string>
     <string name="chau">Bye</string>
@@ -39,6 +41,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="dialog_start_game">"Are you sure you want to book class: %s1 on %s2 ?"</string>
+    <string name="accept_gym">"Book"</string>
+    <string name="class_successfully_booked">"Class successfully booked"</string>
+    <string name="class_book_error">"Couldn't book class, please try again"</string>
+    <string name="cancel">"Cancel"</string>
 
     <string name="gymAvatar">Miniature image of the gym</string>
     <string name="searchbarHint">Search</string>
@@ -46,4 +53,7 @@
 
     <string name="gymDistancePlaceholder">Distance:</string>
     <string name="meterUnitDescription">meters</string>
+    <string name="kilometerUnitDescription">km</string>
+
+    <string name="schedule">From %s to %s</string>
 </resources>

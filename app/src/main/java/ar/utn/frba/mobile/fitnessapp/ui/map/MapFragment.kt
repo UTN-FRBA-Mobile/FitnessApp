@@ -11,7 +11,7 @@ import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentMapBinding
 import ar.utn.frba.mobile.fitnessapp.model.Gym
-import ar.utn.frba.mobile.fitnessapp.model.GymsService
+import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -52,13 +50,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
-        val service = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create()) // Para parsear automágicamente el json
-            .baseUrl("https://utn-fitness-api.fly.dev/api/v1/")
-            .build()
-            .create(GymsService::class.java) // la interfaz que diseñaron antes
 
-        service.getGyms().enqueue(object : Callback<List<Gym>> {
+        val backend = BackendService.create()
+        backend.gyms().enqueue(object : Callback<List<Gym>> {
             override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) {
 
                 val gyms = response.body()!!

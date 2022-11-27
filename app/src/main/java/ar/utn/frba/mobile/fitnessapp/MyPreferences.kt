@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 
 object MyPreferences {
     private const val showBGsKey = "preference_is_show_backgrounds"
+    private const val showCamInfo = "pref_cam_info"
+    private const val cameraID = "pref_cam_ID"
     private val PREF_NAME = "PREF_NAME"
     private val FIREBASE_TOKEN = "FIREBASE_TOKEN"
 
@@ -35,5 +37,25 @@ object MyPreferences {
 
     fun isShowBGsPreferredView(context: Context): Boolean {
         return getPreferences(context).getBoolean(showBGsKey, true)
+    }
+
+    fun setShowCamInfoPreference(context: Context, value: Boolean) {
+        val edit: SharedPreferences.Editor = getPreferences(context).edit()
+        edit.putBoolean(showCamInfo, value)
+        edit.apply()
+    }
+
+    fun isCamInfoEnabled(context: Context): Boolean {
+        return getPreferences(context).getBoolean(showCamInfo, false)
+    }
+
+    fun setCameraIDPreference(context: Context, value: Int) {
+        val edit: SharedPreferences.Editor = getPreferences(context).edit()
+        edit.putInt(cameraID, value)
+        edit.apply()
+    }
+
+    fun getCameraID(context: Context): Int {
+        return getPreferences(context).getInt(cameraID, 0)
     }
 }

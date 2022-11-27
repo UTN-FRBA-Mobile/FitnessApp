@@ -10,7 +10,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+
 
         <!-- https://developer.android.com/develop/ui/views/components/settings/organize-your-settings -->
 
@@ -58,8 +61,39 @@
             android:paddingRight="?attr/actionBarSize"
             android:background="#BBFFE7DA"/>
 
-        <Button
+        <CheckBox android:id="@+id/cam_stats"
             app:layout_constraintTop_toBottomOf="@id/adorno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cam_stats"
+            android:onClick="onCheckboxClicked"
+            android:paddingRight="?attr/actionBarSize"
+            android:background="#BBFFE7DA"/>
+
+        <TextView
+            android:id="@+id/cameraIDText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingStart="16dp"
+            android:background="#BBFFE7DA"
+            android:text="@string/cam_select"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cam_stats" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:spinnerMode="dropdown"
+            android:background="#BBFFE7DA"
+            app:layout_constraintLeft_toRightOf="@+id/cameraIDText"
+            app:layout_constraintTop_toTopOf="@+id/cameraIDText"
+            />
+
+        <Button
             android:id="@+id/button_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +101,9 @@
             android:onClick="sendMessage"
             android:paddingRight="?attr/actionBarSize"
             android:background="#BBFFE7DA"
+            app:layout_constraintTop_toBottomOf="@id/adorno"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="128dp"
             android:layout_marginBottom="64dp"/>
 
 

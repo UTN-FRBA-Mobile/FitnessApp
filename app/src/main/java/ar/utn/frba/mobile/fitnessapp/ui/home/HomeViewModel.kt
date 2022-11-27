@@ -1,11 +1,15 @@
 package ar.utn.frba.mobile.fitnessapp.ui.home
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ar.utn.frba.mobile.fitnessapp.model.Gym
-import ar.utn.frba.mobile.fitnessapp.model.GymClass
-import ar.utn.frba.mobile.fitnessapp.model.Location
+import ar.utn.frba.mobile.fitnessapp.model.*
+import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
+import ar.utn.frba.mobile.fitnessapp.model.backend.GymQuery
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
     private val _searchResults = MutableLiveData<ArrayList<Gym>>().apply {
@@ -13,43 +17,33 @@ class HomeViewModel : ViewModel() {
     }
     val searchResults: LiveData<ArrayList<Gym>> = _searchResults
 
-    fun search(location: Location, query: String = "") {
-        // TODO: Request gyms using a string
-        val exampleClasses = arrayListOf(
-            GymClass(id = 1,
-                     type = "Clase 1",
-                     professor = "Pepe",
-                     startDate = "10 JUL 2022 - 10:30 am",
-                     endDate = "10 JUL 2022 - 12:00 am",
-                     people = 10,
-                     maxCapacity = 15),
-            GymClass(id = 2,
-                     type = "Clase 2",
-                     professor = "Carlos",
-                     startDate = "10 JUL 2022 - 10:30 am",
-                     endDate = "10 JUL 2022 - 12:00 am",
-                     people = 15,
-                     maxCapacity = 15)
-        )
+    private val backend: BackendService = BackendService.create()
 
-        var queryResults = arrayListOf(Gym(id=1,
-                                           avatar="",
-                                           name="Un gimnasio que busqué yo",
-                                           location=Location(latitude=1.0, longitude=1.0),
-                                           classes=exampleClasses))
-        if (query == "") {
-            queryResults = arrayListOf(Gym(id=2,
-                                           avatar="",
-                                           name="Aca a la vuelta",
-                                           location=Location(latitude=1.0, longitude=1.0),
-                                           classes=exampleClasses),
-                                       Gym(id=3,
-                                           avatar="",
-                                           name="Un gimnasio re copado",
-                                           location=Location(latitude=1.0, longitude=1.0),
-                                           classes=exampleClasses))
+    fun search(query: String = "", location: Location? = null, onFailure: (Call<List<Gym>>, t: Throwable) -> Unit) {
+        val searchQuery = GymQuery(name         = query,
+                                   nearPoint    = location,
+                                   searchRadius = 100_000_000.0)   // Por defecto uso 100_000 km
+
+        backend.search(searchQuery).enqueue(gymsRequestCallback(location, onFailure))
+    }
+
+    private fun gymsRequestCallback(location: Location?, onFailure: (Call<List<Gym>>, t: Throwable) -> Unit): Callback<List<Gym>> {
+        return object : Callback<List<Gym>> {
+            override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) {
+                val gyms = response.body()!!
+
+                var results = gyms
+                if (location != null) {
+                    results = gyms.sortedBy { it.distance(location) }
+                }
+
+                _searchResults.value = ArrayList(results)
+            }
+
+            override fun onFailure(call: Call<List<Gym>>, t: Throwable) {
+                onFailure(call, t)
+                _searchResults.value = arrayListOf()
+            }
         }
-
-        _searchResults.value = ArrayList(queryResults.sortedBy { it.distance(location) })
     }
 }

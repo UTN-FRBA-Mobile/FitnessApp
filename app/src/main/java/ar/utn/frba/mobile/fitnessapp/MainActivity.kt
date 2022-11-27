@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
                         settingsScreen?.setBackgroundResource(0);
                     }
                 }
+                R.id.cam_stats -> {
+                        MyPreferences.setShowCamInfoPreference(this, checked)
+                }
                 R.id.adorno -> {
                     if (checked) {
                         Toast.makeText(this, getString(R.string.hola), Toast.LENGTH_SHORT).show()
@@ -123,7 +126,8 @@ class MainActivity : AppCompatActivity() {
 
             val subFragments = setOf(
                 R.id.classesFragment,
-                R.id.detailsFragment
+                R.id.navigation_details,
+                R.id.acceptDialogFragment
             )
 
             if (destination.id in subFragments) {
