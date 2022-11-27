@@ -5,9 +5,11 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.navArgs
 import ar.utn.frba.mobile.fitnessapp.R
 
 class AcceptDialogFragment : DialogFragment() {
+    private val args: AcceptDialogFragmentArgs by navArgs()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

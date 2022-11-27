@@ -123,7 +123,8 @@ class MainActivity : AppCompatActivity() {
 
             val subFragments = setOf(
                 R.id.classesFragment,
-                R.id.detailsFragment
+                R.id.detailsFragment,
+                R.id.acceptDialogFragment
             )
 
             if (destination.id in subFragments) {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
@@ -49,9 +50,9 @@ class ClassesFragment : Fragment() {
                 classList.adapter = adapter
 
                 classList.setOnItemClickListener { parent, _, position, _ ->
-                    val gymClass = parent.getItemAtPosition(position)
-                    println("Click: $gymClass")  // TODO: Open modal.
-                    AcceptDialogFragment()
+                    val gymClass = parent.getItemAtPosition(position) as GymClass
+                    val action = ClassesFragmentDirections.actionClassesFragmentToAcceptDialogFragment(gymClass)
+                    findNavController().navigate(action)
                 }
             },
 
