@@ -35,6 +35,3 @@ El codigo del servicio de backend se encuentra en este [repositorio](https://git
 
 
 </div>
-
-## QR Scanning
-![Alt Text](https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qrVideo.gif)
