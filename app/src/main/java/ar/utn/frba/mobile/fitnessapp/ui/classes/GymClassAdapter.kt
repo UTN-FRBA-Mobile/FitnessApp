@@ -35,8 +35,8 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
 
         gymClassType.text = gymClass.type
         gymClassProfessor.text = gymClass.professor
-        gymClassStartDate.text = gymClass.startDate
-        gymClassEndDate.text = gymClass.endDate
+        gymClassStartDate.text = "FECHA DE INICIO"  // TODO ¿Que hacemos con los schedules?
+        gymClassEndDate.text = "FECHA DE FIN"
         val peopleStatus = "${gymClass.people} / ${gymClass.maxCapacity}"
         gymClassPeopleStatus.text = peopleStatus
 
@@ -46,14 +46,12 @@ class GymClassAdapter(private val currContext: Context, private val arrayList: A
             val notAvailableColorSecondary =
                 currContext.resources.getColor(R.color.classUnavailableSecondary, currContext.theme)
 
-            val cornerRadius =
-                currContext.resources.getDimension(R.dimen.cardCornerRadius)
-
             classCard.setBackgroundColor(notAvailableColorSecondary)
             cardInfo.setBackgroundColor(notAvailableColorPrimary)
-
-            classCard.radius = cornerRadius
         }
+
+        val cornerRadius = currContext.resources.getDimension(R.dimen.cardCornerRadius)
+        classCard.radius = cornerRadius
 
         return view
     }

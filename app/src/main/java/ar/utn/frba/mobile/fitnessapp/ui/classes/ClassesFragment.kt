@@ -8,16 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ListView
+import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import ar.utn.frba.mobile.fitnessapp.MyPreferences
 import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.databinding.FragmentClassesBinding
+import ar.utn.frba.mobile.fitnessapp.model.GymClass
+import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ClassesFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private var _binding: FragmentClassesBinding? = null
     private val binding get() = _binding!!
+    private val backend: BackendService = BackendService.create()
 
     private val args: ClassesFragmentArgs by navArgs()
 
@@ -32,13 +39,27 @@ class ClassesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = GymClassAdapter(requireContext(), args.gym.classes)
-        val classList: ListView = binding.classList
-        classList.adapter = adapter
-        classList.setOnItemClickListener { parent, _, position, _ ->
-            val gymClass = parent.getItemAtPosition(position)
-            println("Click: $gymClass")
-        }
+        backend.classes(gymId = args.gym.id).enqueue(object : Callback<List<GymClass>> {
+            override fun onResponse(call: Call<List<GymClass>>, response: Response<List<GymClass>>) {
+                val classes = response.body()!!
+
+                val adapter = GymClassAdapter(requireContext(), ArrayList(classes))
+                val classList: ListView = binding.classList
+                classList.adapter = adapter
+
+                classList.setOnItemClickListener { parent, _, position, _ ->
+                    val gymClass = parent.getItemAtPosition(position)
+                    println("Click: $gymClass")  // TODO: Open modal.
+                }
+            }
+
+            override fun onFailure(call: Call<List<GymClass>>, t: Throwable) {
+                Toast.makeText(requireContext(), "An error occurred when attempting to communicate with the server", Toast.LENGTH_LONG).show()
+                Log.println(Log.WARN, "[CLASSES_FRAGMENT][GET_CLASSES]", t.toString())
+            }
+        })
+
+
     }
 
     override fun onStart() {

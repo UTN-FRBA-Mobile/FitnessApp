@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     override fun onCreateView(
@@ -128,13 +128,13 @@ class HomeFragment : Fragment() {
             this,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             100,
-            "Fitness App necesita poder acceder a tu ubicacion para poder arrojarte mejores resultados de búsqueda."
+            "Fitness App wants to access your location in order to provide you better search results."
         )
     }
 
     private fun search(query: String = "", location: Location? = null) {
         viewModel.search(query, location?.toLocation()) { _, t ->
-            Toast.makeText(requireContext(), "An error ocurred when attempting to comunicate with the server", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "An error occurred when attempting to communicate with the server", Toast.LENGTH_LONG).show()
             Log.println(Log.WARN, "[HOME_FRAGMENT][SEARCH]", t.toString())
         }
     }
