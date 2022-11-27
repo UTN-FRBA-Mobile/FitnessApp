@@ -31,8 +31,10 @@ El codigo del servicio de backend se encuentra en este [repositorio](https://git
 <img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/map.png" width="200"/>
 <img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qr.png" width="200"/>
 <img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/calendar.png" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qrVideo.gif" width="200"/>
 
-QR Scanning
-![Alt Text](https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qrVideo.gif)
 
 </div>
+
+## QR Scanning
+![Alt Text](https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qrVideo.gif)
