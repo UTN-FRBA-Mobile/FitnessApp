@@ -41,6 +41,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="dialog_start_game">"Book class"</string>
     <string name="accept_gym">"Book"</string>
+    <string name="class_successfully_booked">"Class successfully booked"</string>
     <string name="cancel">"Cancel"</string>
 
     <string name="gymAvatar">Miniature image of the gym</string>

@@ -72,7 +72,7 @@
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"
                                 android:text="[Contact Info]"
-                                android:textColor="@color/material_dynamic_neutral10" />
+                                android:textColor="@color/black" />
                         </LinearLayout>
                     </LinearLayout>
 
