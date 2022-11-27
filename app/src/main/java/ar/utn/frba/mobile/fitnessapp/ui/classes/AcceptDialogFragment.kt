@@ -11,6 +11,8 @@ import ar.utn.frba.mobile.fitnessapp.R
 import ar.utn.frba.mobile.fitnessapp.model.backend.BackendService
 import ar.utn.frba.mobile.fitnessapp.model.backend.BookingBody
 import ar.utn.frba.mobile.fitnessapp.model.backend.call
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AcceptDialogFragment : DialogFragment() {
     private val args: AcceptDialogFragmentArgs by navArgs()
@@ -20,12 +22,18 @@ class AcceptDialogFragment : DialogFragment() {
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(it)
-            args.gymClass.schedule.startDate //TODO mejorar la fecha para que te lo muestre mas lindo
+            val cal: Calendar = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH)
+            cal.setTime(sdf.parse(args.gymClass.schedule.startDate)) // all done
+            val month =
+                cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+            val day =
+                cal.get(Calendar.DAY_OF_MONTH).toString()
             builder.setMessage(
                 getString(R.string.dialog_start_game).replace(
                     "%s1",
                     args.gymClass.type
-                ).replace("%s2", args.gymClass.schedule.startDate)
+                ).replace("%s2", "$month $day th")
             )
                 .setPositiveButton(
                     R.string.accept_gym
