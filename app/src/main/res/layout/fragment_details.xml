@@ -86,6 +86,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/details_content_margin_left"
                             android:layout_marginRight="@dimen/details_content_margin_left"
+
                             android:orientation="vertical">
 
                             <TextView
