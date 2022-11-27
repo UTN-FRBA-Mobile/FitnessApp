@@ -24,13 +24,10 @@ La app se comunica con el servicio : [Fitness App Api](https://utn-fitness-api.f
 
 <div id="header" align="center">
 
-<img src="https://user-images.githubusercontent.com/42644816/178361255-f4c1f292-dc4e-4e8a-a0a6-3b757f55fa21.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361258-fce11ed5-cca3-4029-b488-17827b1f2b83.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361280-ef1a9af3-d9ab-4952-9d45-bfc1716c13af.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361271-5442603b-d459-4434-900b-2f0cd2c4181c.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361264-b2fdf85c-f486-45dd-9c3b-6fe9369b68e8.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361277-6e106b8e-22df-4218-aa73-a85cdaf48122.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361273-a954835e-cf9c-4266-9597-b2692d46d182.jpg" width="200"/>
-<img src="https://user-images.githubusercontent.com/42644816/178361248-57054c12-8106-422d-8af0-f847cadfaac0.jpg" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/class.png" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/gymDetails.png" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/home.png" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/map.png" width="200"/>
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/qr.png" width="200"/>
 
 </div>
