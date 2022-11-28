@@ -13,12 +13,16 @@ FitnessApp es una app pensada para pequeños gimnasios y profesores que dan clas
 La app se comunica con el servicio : [Fitness App Api](https://utn-fitness-api.fly.dev/docs)
 El codigo del servicio de backend se encuentra en este [repositorio](https://github.com/tp-mobile-fitness-app/fitness-app-api/tree/develop)
 
+### QRs demo para pegar en los gimnasios
+
+<img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/FitnessApp/main/screens/QRdemo.jpg" width="800"/>
+
 ## Integrantes
 
 - [Facundo Humphreys](https://github.com/facuhump2409) o facuhumpTenpo 
 - [Juan Abdon](https://github.com/CimimUxMaio)
 - [Franco Badenas](https://github.com/Bade99)
-- [Nico](https://github.com/Nico-0)
+- [Nicolás Androchuk](https://github.com/Nico-0)
 - [Alexis Taberna](https://github.com/alexiscaspell)
 
 ## Capturas de pantalla

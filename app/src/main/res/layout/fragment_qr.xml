@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:background="#BBFFE7DA"
+            android:textColor="#FFFFFF"
             android:paddingStart="20dp"
             android:text="Camera permission: "
             android:textSize="16sp"

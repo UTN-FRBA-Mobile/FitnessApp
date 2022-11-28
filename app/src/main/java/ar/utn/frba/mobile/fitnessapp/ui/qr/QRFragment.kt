@@ -99,6 +99,9 @@ class QRFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonScan.setOnClickListener {
             if(Permissions.checkForPermissions(this, Manifest.permission.CAMERA, 951, "dejame mostrar la camera")){
+                val textPermissionStatus = activity?.findViewById<TextView>(R.id.resultBox)
+                textPermissionStatus?.setText("Camera permission: Positivo")
+                textPermissionStatus?.setBackgroundColor(Color.parseColor("#cc33ad33"))
                 launchCamera()
             }
         }
@@ -402,7 +405,7 @@ class QRFragment : Fragment() {
 
                         },
                         onFailure = { _, response ->
-                            Toast.makeText(getActivity(), R.string.class_book_error, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getActivity(), R.string.gym_not_exist, Toast.LENGTH_SHORT).show()
                         })
 
 

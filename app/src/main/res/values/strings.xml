@@ -45,6 +45,7 @@
     <string name="accept_gym">"Book"</string>
     <string name="class_successfully_booked">"Class successfully booked"</string>
     <string name="class_book_error">"Couldn't book class, please try again"</string>
+    <string name="gym_not_exist">"Gym does not exist"</string>
     <string name="cancel">"Cancel"</string>
 
     <string name="gymAvatar">Miniature image of the gym</string>
